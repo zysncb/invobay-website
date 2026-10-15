@@ -1,0 +1,92 @@
+---
+import Icon from '../Icon.astro';
+import { OFFICIAL } from '../../config';
+import { useI18n } from '../../i18n';
+const { t, p, w } = useI18n(Astro.url);
+const x = t.home.partners;
+---
+<section class="partners">
+  <div class="wrap section inner">
+    <div class="head">
+      <div class="stack gap18">
+        <span class="kicker">{x.kicker}</span>
+        <h2 class="h-section">{x.title}</h2>
+      </div>
+      <p class="lead">{x.lead}</p>
+    </div>
+    <div class="stack gap16">
+      <span class="eyebrow">{x.recommended}</span>
+      <div class="cards">
+        {t.partners.list.map((c) => (
+          <article class="pcard">
+            <div class="who">
+              <span class="ini" aria-hidden="true">{c.ini}</span>
+              <span class="stack gap2 grow"><span class="name-row"><b class="name">{c.name}</b><span class="pill pill-tint strength-pill">{c.strength}</span></span>
+                <span class="connected"><Icon name="check" size={12} color="#15683A" />{x.connected}</span></span>
+            </div>
+            <div class="big">
+              <span class="eyebrow">{c.strength.toUpperCase()}</span>
+              <b>{c.big}</b>
+              <span class="big-sub">{c.sub}</span>
+            </div>
+            <dl class="metrics">
+              {c.metrics.map(([k, v, hot]) => <div><dt>{k}</dt><dd class:list={{ hot }}>{v}</dd></div>)}
+            </dl>
+            <ul class="ticks feats">{c.feats.map((f) => <li><Icon name="check" size={16} color="#1F4FD8" />{f}</li>)}</ul>
+          </article>
+        ))}
+      </div>
+    </div>
+    <div class="cta">
+      <a href={w('asp')} class="btn btn-primary">{x.cta}</a>
+      <span>{x.orBefore}<a href={OFFICIAL.mofAsps.url} target="_blank" rel="noopener noreferrer" class="link">{x.orLink}<Icon name="external" size={12} /></a>{x.orAfter}</span>
+      <a href={p('/service-providers')} class="link compare">{x.compare}<Icon name="arrow" size={14} /></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .partners { position: relative; overflow: hidden; background: #fff; }
+  .partners::before { content: ''; position: absolute; inset: 0; background: radial-gradient(45% 70% at 100% 0%, rgba(47,102,242,0.12), rgba(47,102,242,0) 70%), radial-gradient(35% 60% at 0% 100%, rgba(47,102,242,0.08), rgba(47,102,242,0) 70%); }
+  .inner { position: relative; display: flex; flex-direction: column; gap: 44px; }
+  .gap18 { gap: 18px; } .gap16 { gap: 16px; } .gap2 { gap: 2px; } .grow { flex: 1 1 auto; }
+  .head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 560px); gap: 24px 64px; align-items: end; }
+  .eyebrow { font: 500 12px/16px var(--mono); letter-spacing: 0.08em; color: var(--cobalt-ink); }
+  .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .pcard { display: flex; flex-direction: column; gap: 18px; padding: 28px; border-radius: var(--radius); background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-card); }
+  .who { display: flex; align-items: center; gap: 12px; }
+  .ini { width: 44px; height: 44px; flex: 0 0 auto; border-radius: 12px; background: var(--cobalt); color: #fff; display: flex; align-items: center; justify-content: center; font: 800 20px var(--display); }
+  .name-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .name { font-size: 20px; line-height: 24px; font-weight: 600; }
+  .strength-pill { display: none; height: 22px; font-size: 11px; padding: 0 9px; }
+  .connected { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--ok); }
+  .big { display: flex; flex-direction: column; gap: 4px; padding: 18px 20px; border-radius: var(--radius); background: var(--cobalt-tint); }
+  .big b { font: 800 40px/46px var(--display); letter-spacing: -0.03em; color: var(--navy); }
+  .big-sub { font-size: 14px; color: var(--ink-2); }
+  .metrics { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .metrics dt { font-size: 12px; color: var(--ink-3); }
+  .metrics dd { margin: 2px 0 0; font: 400 14px var(--mono); }
+  .metrics dd.hot { font-weight: 600; color: var(--cobalt-ink); }
+  .feats { padding-top: 16px; border-top: 1px solid var(--line-soft); gap: 8px; }
+  .feats li { font-size: 15px; line-height: 22px; align-items: center; }
+  .feats li :global(svg) { margin-top: 0; }
+  .cta { display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap; font-size: 15px; color: var(--ink-2); }
+  .cta .link { font-weight: 600; }
+  .compare { margin-inline-start: auto; }
+  @media (max-width: 1099px) {
+    .head { grid-template-columns: 1fr; }
+    .cards { grid-template-columns: 1fr; gap: 12px; }
+    .pcard { padding: 18px; gap: 14px; box-shadow: 0 14px 36px rgba(11,31,92,0.08); }
+    .big, .feats { display: none; }
+    .strength-pill { display: inline-flex; }
+    .metrics { padding-top: 12px; border-top: 1px solid var(--line-soft); }
+  }
+  @media (max-width: 767px) {
+    .inner { gap: 20px; }
+    .cta { flex-direction: column; align-items: stretch; text-align: center; }
+    .cta .btn { width: 100%; }
+    .compare { margin: 0 auto; }
+    .ini { width: 40px; height: 40px; font-size: 18px; }
+    .name { font-size: 18px; }
+  }
+</style>

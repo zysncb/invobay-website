@@ -1,0 +1,60 @@
+---
+import art from '../../data/art.json';
+import { useI18n } from '../../i18n';
+import { artText } from '../../i18n/art';
+const { t, p, w, lang } = useI18n(Astro.url);
+const x = t.home.onboard;
+---
+<section class="onboard">
+  <div class="wrap section inner">
+    <div class="head">
+      <div class="stack gap16">
+        <span class="kicker on-dark">{x.kicker}</span>
+        <h2 class="h-section">{x.title}</h2>
+      </div>
+      <p class="lead on-dark">{x.lead}</p>
+    </div>
+    <div class="ways">
+      <article class="way">
+        <span class="pill pill-tint tag">{x.selfTag}</span>
+        <h3>{x.selfTitle}</h3>
+        <p>{x.selfText}</p>
+        <div class="art" dir="ltr" set:html={artText(art.guideThumb, lang)} />
+        <a href={p('/guides/emaratax-onboarding')} class="btn btn-secondary go">{x.selfCta}</a>
+      </article>
+      <article class="way featured">
+        <span class="pill pill-solid tag">{x.managedTag}</span>
+        <h3>{x.managedTitle}</h3>
+        <p>{x.managedText}</p>
+        <div class="rows" aria-hidden="true" set:html={artText(art.orderRows, lang)} />
+        <div set:html={artText(art.appsNote, lang)} />
+        <a href={w('managed')} class="btn btn-primary go">{x.managedCta}</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .onboard { position: relative; overflow: hidden; color: #fff; background: radial-gradient(50% 70% at 15% 0%, rgba(47,102,242,0.45), rgba(47,102,242,0) 70%), linear-gradient(180deg, #0B1F5C 0%, #081747 100%); }
+  .inner { display: flex; flex-direction: column; gap: 36px; }
+  .gap16 { gap: 16px; }
+  .head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 560px); gap: 20px 64px; align-items: end; }
+  .ways { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .way { display: flex; flex-direction: column; gap: 14px; padding: 28px; border-radius: var(--radius); background: #fff; color: var(--ink); }
+  .way.featured { box-shadow: 0 0 0 3px var(--cobalt-bright); }
+  .tag { align-self: flex-start; }
+  .way h3 { font-size: 28px; line-height: 34px; font-weight: 600; letter-spacing: -0.02em; }
+  .way p { font-size: 16px; line-height: 24px; color: var(--ink-2); }
+  .art { display: flex; flex: 1 1 auto; }
+  .rows { flex: 1 1 auto; padding: 12px; border-radius: 12px; border: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
+  .go { align-self: flex-start; }
+  @media (max-width: 1099px) { .head { grid-template-columns: 1fr; } }
+  @media (max-width: 860px) { .ways { grid-template-columns: 1fr; } }
+  @media (max-width: 767px) {
+    .inner { gap: 20px; }
+    .way { padding: 20px; gap: 12px; }
+    .way h3 { font-size: 22px; line-height: 28px; }
+    .way p { font-size: 15px; line-height: 22px; }
+    .go { align-self: stretch; }
+  }
+</style>

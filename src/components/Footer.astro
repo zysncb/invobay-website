@@ -1,0 +1,51 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { COMPANY } from '../config';
+import { LIVE, META, localize, stripLang, useI18n } from '../i18n';
+const { t, p, w, lang } = useI18n(Astro.url);
+const cols = [
+  { title: t.footer.product, links: [{ t: t.nav.partners, h: p('/service-providers') }, { t: t.nav.pricing, h: p('/pricing') }, { t: t.nav.guide, h: p('/guides/emaratax-onboarding') }, { t: t.footer.questions, h: p('/#faq') }] },
+  { title: t.footer.company, links: [{ t: t.nav.about, h: p('/about') }, { t: t.nav.contact, h: p('/contact') }, { t: t.footer.terms, h: p('/legal#terms') }, { t: t.footer.privacy, h: p('/legal#privacy') }, { t: t.footer.cookies, h: p('/legal#cookies') }, { t: t.footer.refunds, h: p('/legal#refunds') }] },
+  { title: t.footer.start, links: [{ t: t.nav.signup, h: w('signup') }, { t: t.nav.signin, h: w('signin') }] },
+];
+const here = stripLang(Astro.url.pathname);
+---
+<footer class="site-footer">
+  <div class="wrap top">
+    <div class="brand">
+      <a href={p('/')} aria-label={t.site.home} class="home"><Logo color="#0B1F5C" wordSize={20} size={28} /></a>
+      <p>{t.footer.blurb}</p>
+      <span class="langs">{LIVE.map((l, i) => <>{i > 0 && ' · '}{l === lang ? <span lang={META[l].html}>{META[l].name}</span> : <a href={localize(l, here)} lang={META[l].html} hreflang={META[l].html}>{META[l].name}</a>}</>)}</span>
+    </div>
+    {cols.map((c) => (
+      <nav class="col" aria-label={c.title}>
+        <span class="col-title">{c.title}</span>
+        {c.links.map((l) => <a href={l.h}>{l.t}</a>)}
+      </nav>
+    ))}
+  </div>
+  <div class="wrap bottom">
+    <span>{t.footer.copyright} <a href={COMPANY.url} target="_blank" rel="noopener noreferrer">{COMPANY.name}</a> {t.footer.notAffiliated}</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--paper-2); border-top: 1px solid var(--line); }
+  .top { padding-block: 56px 36px; display: grid; grid-template-columns: 2fr repeat(3, minmax(0, 1fr)); gap: 32px; }
+  .brand { display: flex; flex-direction: column; gap: 14px; }
+  .home { color: var(--navy); text-decoration: none; }
+  .brand p { max-width: 340px; font-size: 14px; line-height: 22px; color: var(--ink-2); }
+  .langs { font-size: 13px; color: var(--ink-3); }
+  .langs a { color: var(--ink-2); }
+  .col { display: flex; flex-direction: column; gap: 10px; }
+  .col-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .col a { display: block; font-size: 14px; line-height: 20px; color: var(--ink-2); text-decoration: none; }
+  .col a :global(svg) { display: inline; vertical-align: -1px; margin-inline-start: 4px; }
+  .col a:hover { color: var(--cobalt-ink); text-decoration: underline; text-underline-offset: 3px; }
+  .bottom { padding-block: 20px 32px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; font-size: 13px; line-height: 20px; color: var(--ink-3); }
+  .bottom a { color: var(--ink-2); font-weight: 600; }
+  @media (max-width: 1100px) { .top { grid-template-columns: repeat(3, minmax(0, 1fr)); } .brand { grid-column: 1 / -1; } }
+  @media (max-width: 600px) { .top { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 520px) { .top { padding-block: 36px 28px; gap: 28px 16px; } }
+</style>

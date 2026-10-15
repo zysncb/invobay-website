@@ -1,0 +1,48 @@
+---
+import { useI18n } from '../../i18n';
+const { t, p } = useI18n(Astro.url);
+const x = t.home.faq;
+---
+<section class="faq" id="faq">
+  <div class="wrap inner">
+    <div class="head">
+      <div class="stack gap12">
+        <span class="kicker">{x.kicker}</span>
+        <h2 class="h-block">{x.title}</h2>
+      </div>
+      <a href={p('/contact')} class="btn btn-secondary">{x.more}</a>
+    </div>
+    <div class="list">
+      {x.items.map((f) => (
+        <details class="item">
+          <summary><span>{f.q}</span><span class="sign" aria-hidden="true"></span></summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq { background: #fff; scroll-margin-top: 16px; }
+  .inner { padding-block: 88px 80px; display: flex; flex-direction: column; gap: 32px; }
+  .gap12 { gap: 12px; }
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px 32px; flex-wrap: wrap; }
+  .h-block { font-size: clamp(28px, 2.8vw, 40px); }
+  .list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 56px; align-items: start; border-bottom: 1px solid var(--line); }
+  .item { border-top: 1px solid var(--line); }
+  summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 0; font-size: 17px; line-height: 24px; font-weight: 600; cursor: pointer; }
+  summary::-webkit-details-marker { display: none; }
+  .sign { position: relative; width: 28px; height: 28px; flex: 0 0 auto; border-radius: 999px; background: var(--cobalt-tint); }
+  .sign::before, .sign::after { content: ''; position: absolute; left: 50%; top: 50%; width: 12px; height: 2.4px; border-radius: 2px; background: var(--cobalt-ink); transform: translate(-50%, -50%); }
+  .sign::after { transform: translate(-50%, -50%) rotate(90deg); transition: transform .2s; }
+  .item[open] .sign::after { transform: translate(-50%, -50%) rotate(0deg); }
+  .item p { padding: 0 0 20px; padding-inline-end: 44px; font-size: 15px; line-height: 23px; color: var(--ink-2); }
+  @media (max-width: 860px) {
+    .inner { padding-block: 52px 48px; gap: 20px; }
+    .list { grid-template-columns: 1fr; }
+    summary { font-size: 16px; line-height: 22px; padding: 16px 0; }
+    .item p { padding-inline-end: 0; }
+    .head .btn { width: 100%; order: 3; }
+  }
+</style>

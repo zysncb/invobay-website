@@ -1,0 +1,55 @@
+---
+// The "how a UAE e-invoice travels" scene (five corners), generated from the design source
+// (design/canvas/project/website/E00-Home.dc.html). Desktop shows labelled steps; mobile shows
+// numbered markers with a legend under the scene (see Hero.astro). The markup is in scene.html;
+// its labels are translated, and their pills resized, by sceneText().
+import raw from './scene.html?raw';
+import { useI18n } from '../../i18n';
+import { sceneText } from '../../i18n/art';
+const { lang } = useI18n(Astro.url);
+---
+<Fragment set:html={sceneText(raw, lang)} />
+<style is:global>
+  .scene { direction: ltr; }
+
+.hx-floor{position:absolute;inset:auto 0 0 0;height:400px;perspective:520px;perspective-origin:62% 0;overflow:hidden;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 55%);mask-image:linear-gradient(to bottom,transparent 0%,#000 55%)}
+.hx-plane{position:absolute;left:-60%;right:-60%;top:0;height:320%;transform-origin:50% 0;transform:rotateX(74deg);background-image:linear-gradient(rgba(143,176,255,0.22) 1px,transparent 1px),linear-gradient(90deg,rgba(143,176,255,0.22) 1px,transparent 1px);background-size:80px 80px;animation:hx-floor 9s linear infinite}
+@keyframes hx-floor { from { background-position: 0 0 } to { background-position: 0 80px } }
+
+@media (prefers-reduced-motion: reduce) { .hx-anim,.hx-anim *{animation:none !important} }
+
+.d-pkt{animation:d-pkt 12s cubic-bezier(.45,0,.3,1) infinite}
+@keyframes d-pkt { 0% { transform: translate(0.0px, 16.0px); opacity: 0 } 4%, 9% { transform: translate(0.0px, 0.0px); opacity: 1 } 16%, 18% { transform: translate(63.6px, -36.7px); opacity: 1 } 25%, 36% { transform: translate(127.3px, -73.5px); opacity: 1 } 50%, 58% { transform: translate(254.6px, -147.0px); opacity: 1 } 68%, 92% { transform: translate(363.7px, -210.0px); opacity: 1 } 97%, 100% { transform: translate(363.7px, -210.0px); opacity: 0 } }
+.d-gate{animation:d-gate 12s ease-in-out infinite}
+@keyframes d-gate { 0%, 12% { opacity: 0.6 } 16%, 20% { opacity: 1 } 26%, 100% { opacity: 0.6 } }
+.d-scan{animation:d-scan 12s linear infinite}
+@keyframes d-scan { 0%, 13% { transform: translate(0, 0); opacity: 0 } 14% { transform: translate(0, 0); opacity: 1 } 20% { transform: translate(0, -72.8px); opacity: 1 } 21%, 100% { transform: translate(0, -72.8px); opacity: 0 } }
+.d-glow2{animation:d-glow2 12s ease-out infinite}
+@keyframes d-glow2 { 0%, 24% { opacity: 0 } 27% { opacity: 0.85 } 38%, 100% { opacity: 0 } }
+.d-glow3{animation:d-glow3 12s ease-out infinite}
+@keyframes d-glow3 { 0%, 49% { opacity: 0 } 52% { opacity: 0.7 } 62%, 100% { opacity: 0 } }
+.d-flow{animation:d-flow 1.4s linear infinite}
+@keyframes d-flow { 0% { stroke-dashoffset: 0 } 100% { stroke-dashoffset: -26 } }
+.d-fta{animation:d-fta 12s ease-out infinite}
+@keyframes d-fta { 0%, 34% { opacity: 0.6 } 38%, 92% { opacity: 1 } 98%, 100% { opacity: 0.6 } }
+.d-pulse2{animation:d-pulse2 12s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes d-pulse2 { 0%, 27% { transform: translate(0, 0); opacity: 0 } 28% { transform: translate(0, 0); opacity: 1 } 36% { transform: translate(41.8px, -171.1px); opacity: 1 } 38%, 100% { transform: translate(41.8px, -171.1px); opacity: 0 } }
+.d-pulse3{animation:d-pulse3 12s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes d-pulse3 { 0%, 53% { transform: translate(0, 0); opacity: 0 } 54% { transform: translate(0, 0); opacity: 1 } 62% { transform: translate(-41.8px, -122.8px); opacity: 1 } 64%, 100% { transform: translate(-41.8px, -122.8px); opacity: 0 } }
+.d-l1{animation:d-l1 12s ease-in-out infinite}
+@keyframes d-l1 { 0%, 12% { fill: #1F4FD8; stroke: #FFFFFF } 15% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } 100% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } }
+.d-l2{animation:d-l2 12s ease-in-out infinite}
+@keyframes d-l2 { 0% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } 20% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } 22%, 40% { fill: #1F4FD8; stroke: #FFFFFF } 43% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } 100% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } }
+.d-l3{animation:d-l3 12s ease-in-out infinite}
+@keyframes d-l3 { 0% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } 46% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } 48%, 62% { fill: #1F4FD8; stroke: #FFFFFF } 65% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } 100% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } }
+.d-l4{animation:d-l4 12s ease-in-out infinite}
+@keyframes d-l4 { 0% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } 64% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } 66%, 92% { fill: #1F4FD8; stroke: #FFFFFF } 95% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } 100% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } }
+.d-l5{animation:d-l5 12s ease-in-out infinite}
+@keyframes d-l5 { 0% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } 32% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } 34%, 44% { fill: #1F4FD8; stroke: #FFFFFF } 47% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } 58% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } 60%, 70% { fill: #1F4FD8; stroke: #FFFFFF } 73% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } 100% { fill: rgba(6,16,52,0.82); stroke: rgba(157,184,255,0.55) } }
+.d-b1{animation:d-b1 12s cubic-bezier(.2,.8,.2,1) infinite}
+@keyframes d-b1 { 0%, 16% { opacity: 0; transform: translateY(8px) scale(0.9) } 19%, 92% { opacity: 1; transform: translateY(0) scale(1) } 97%, 100% { opacity: 0; transform: translateY(0) scale(1) } }
+.d-b2{animation:d-b2 12s cubic-bezier(.2,.8,.2,1) infinite}
+@keyframes d-b2 { 0%, 36% { opacity: 0; transform: translateY(8px) scale(0.9) } 39%, 92% { opacity: 1; transform: translateY(0) scale(1) } 97%, 100% { opacity: 0; transform: translateY(0) scale(1) } }
+.d-b3{animation:d-b3 12s cubic-bezier(.2,.8,.2,1) infinite}
+@keyframes d-b3 { 0%, 69% { opacity: 0; transform: translateY(8px) scale(0.9) } 72%, 92% { opacity: 1; transform: translateY(0) scale(1) } 97%, 100% { opacity: 0; transform: translateY(0) scale(1) } }
+</style>

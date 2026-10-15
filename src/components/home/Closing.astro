@@ -1,0 +1,45 @@
+---
+import { useI18n } from '../../i18n';
+const { t, w } = useI18n(Astro.url);
+const x = t.home.closing;
+---
+<section class="closing">
+  <picture class="photo" aria-hidden="true">
+    <source media="(max-width: 767px)" srcset="/images/bay-skyline-1200.webp" />
+    <img src="/images/bay-skyline.webp" alt="" loading="lazy" decoding="async" />
+  </picture>
+  <div class="shade" aria-hidden="true"></div>
+  <div class="wrap inner">
+    <h2 class="h-section">{x.title}</h2>
+    <p class="line" data-closing>{x.line}</p>
+    <ol class="recap">
+      {x.steps.map((step, i) => <li><span class="n">{i + 1}</span>{step}</li>)}
+    </ol>
+    <a href={w('signup')} class="btn btn-light btn-lg">{x.cta}</a>
+    <span class="note">{x.note}</span>
+  </div>
+</section>
+
+<script>
+  import { applyLiveDates } from '../../scripts/dates';
+  applyLiveDates();
+</script>
+
+<style>
+  .closing { position: relative; overflow: hidden; background: var(--navy); color: #fff; }
+  .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 55%; }
+  .shade { position: absolute; inset: 0; background: var(--navy); opacity: 0.62; }
+  .inner { position: relative; padding-block: 120px 128px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 20px; }
+  .h-section { font-size: clamp(34px, 4vw, 56px); }
+  .line { font-size: clamp(16px, 1.4vw, 19px); line-height: 1.5; color: #F0F4FF; }
+  .recap { list-style: none; margin: 0; padding: 8px 0 12px; display: flex; align-items: center; gap: 12px 28px; flex-wrap: wrap; justify-content: center; }
+  .recap li { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; }
+  .n { width: 24px; height: 24px; border-radius: 999px; background: rgba(255,255,255,0.2); display: inline-flex; align-items: center; justify-content: center; font: 11px var(--mono); }
+  .note { font-size: 14px; color: #E6ECFF; }
+  @media (max-width: 767px) {
+    .inner { padding-block: 72px 76px; gap: 16px; }
+    .recap { flex-direction: column; align-items: flex-start; }
+    .btn { width: 100%; }
+    .note { font-size: 13px; }
+  }
+</style>

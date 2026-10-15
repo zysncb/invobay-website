@@ -1,0 +1,12 @@
+---
+interface Props { size?: number; color?: string; fold?: string; word?: boolean; wordSize?: number }
+const { size = 30, color = 'currentColor', fold = '#2F66F2', word = true, wordSize = 22 } = Astro.props;
+---
+<span class="logo">
+  <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden="true"><path d="M9 10h4l3 3v25H9z" fill={color}></path><path d="M13 10l3 3h-3z" fill={fold}></path><path d="M22 38V10l14 28V10" fill="none" stroke={color} stroke-width="6" stroke-linecap="square" stroke-linejoin="miter"></path></svg>
+  {word && <span class="word" style={`font-size: ${wordSize}px`}>invobay</span>}
+</span>
+<style>
+  .logo { display: inline-flex; align-items: center; gap: 8px; }
+  .word { font-family: var(--display); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+</style>

@@ -1,0 +1,51 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import { LIVE, useI18n } from '../../i18n';
+interface Props { redirect?: boolean }
+const { redirect = false } = Astro.props;
+const { t, p } = useI18n(Astro.url);
+const others = LIVE.filter((l) => l !== 'en');
+const N = t.notFound;
+---
+<Base title={N.title} noindex>
+  {redirect && (
+    <script is:inline define:vars={{ others }}>
+      const seg = location.pathname.split('/')[1];
+      if (others.includes(seg) && location.pathname !== `/${seg}/404/`) location.replace(`/${seg}/404/`);
+    </script>
+  )}
+  <section class="nf">
+    <div class="wrap row">
+      <div class="doc" aria-hidden="true">
+        <div class="sheet"></div>
+        <svg width="64" height="64" viewBox="0 0 64 64" class="fold"><path d="M0 0L64 64H0z" fill="#2F66F2"></path></svg>
+        <b>404</b>
+        <span class="l1"></span><span class="l2"></span>
+      </div>
+      <div class="copy">
+        <span class="kicker">{N.kicker}</span>
+        <h1 class="h-page">{N.h1}</h1>
+        <p class="lead">{N.lead}</p>
+        <div class="links">{N.links.map(([label, h]) => <a href={p(h)} class="link">{label}<Icon name="arrow" size={14} /></a>)}</div>
+        <a href={p('/')} class="btn btn-primary">{N.home}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf { background: var(--wash); }
+  .row { padding-block: clamp(64px, 9vw, 120px) clamp(72px, 10vw, 140px); display: flex; align-items: center; gap: 48px 80px; }
+  .doc { position: relative; width: 300px; height: 360px; flex: 0 0 auto; }
+  .sheet { position: absolute; inset: 0; border-radius: 18px; background: #fff; box-shadow: 0 30px 70px rgba(11,31,92,0.14); clip-path: polygon(0 0, calc(100% - 64px) 0, 100% 64px, 100% 100%, 0 100%); }
+  .fold { position: absolute; top: 0; right: 0; }
+  .doc b { position: absolute; left: 36px; top: 120px; font: 800 88px/88px var(--display); letter-spacing: -0.04em; color: var(--navy); }
+  .l1, .l2 { position: absolute; left: 36px; height: 8px; border-radius: 999px; background: var(--line); }
+  .l1 { right: 36px; top: 236px; } .l2 { width: 140px; top: 256px; }
+  .copy { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+  .copy .lead { max-width: 560px; }
+  .links { display: flex; gap: 12px 24px; flex-wrap: wrap; }
+  .copy .btn { margin-top: 8px; }
+  @media (max-width: 860px) { .row { flex-direction: column; align-items: flex-start; } .doc { width: 200px; height: 240px; } .doc b { left: 24px; top: 78px; font-size: 60px; line-height: 60px; } .l1 { left: 24px; right: 24px; top: 158px; } .l2 { left: 24px; width: 90px; top: 174px; } }
+</style>

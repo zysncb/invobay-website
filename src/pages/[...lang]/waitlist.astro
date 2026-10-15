@@ -1,0 +1,117 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { WAITLIST_ENDPOINT } from '../../config';
+const connected = WAITLIST_ENDPOINT.startsWith('https://');
+import { langPaths, useI18n } from '../../i18n';
+export const getStaticPaths = langPaths;
+const { t, p } = useI18n(Astro.url);
+const W = t.waitlist;
+// Copy per intent. The page is static, so the script below swaps it in from ?intent=.
+const INTENTS = W.intents;
+const D = INTENTS.signup;
+---
+<Base title={W.title} description={W.desc} noindex>
+  <section class="wl">
+    <div class="wrap grid">
+      <div class="copy">
+        <span class="pill pill-tint"><span class="dot" aria-hidden="true"></span>{W.soon}</span>
+        <span class="kicker" data-k>{D.kicker}</span>
+        <h1 class="h-page" data-t>{D.title}</h1>
+        <p class="lead" data-x>{D.text}</p>
+        <ul class="ticks">
+          {W.ticks.map((item) => <li><Icon name="check" size={18} color="#1F4FD8" />{item}</li>)}
+        </ul>
+        <p class="meanwhile">{W.meanwhile} <a href={p('/guides/emaratax-onboarding')} class="link">{W.guide}<Icon name="arrow" size={14} /></a></p>
+      </div>
+
+      <div class="card panel">
+        <form method="POST" action={connected ? WAITLIST_ENDPOINT : undefined} data-form data-connected={connected ? 'yes' : 'no'} data-err-email={W.errEmail} data-err-send={W.errSend} data-sending={W.sending} data-submit={W.submit} novalidate>
+          <h2 class="ph">{W.formTitle}</h2>
+          <label class="field"><span>{W.email}</span><input type="email" name="email" required autocomplete="email" inputmode="email" placeholder={W.emailPlaceholder} /></label>
+          <label class="field"><span>{W.company} <em>{W.optional}</em></span><input type="text" name="company" autocomplete="organization" placeholder={W.companyPlaceholder} /></label>
+          <input type="hidden" name="intent" value="signup" data-intent />
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+          <p class="err" data-err role="alert" hidden></p>
+          <button type="submit" class="btn btn-primary btn-block" disabled={!connected}>{W.submit}</button>
+          {connected
+            ? <p class="fine">{W.privacyNote} <a href={p('/legal#privacy')}>{W.privacyLink}</a></p>
+            : <p class="fine off">{W.closed}</p>}
+        </form>
+        <div class="ok" data-ok hidden tabindex="-1">
+          <span class="okic"><Icon name="check" size={24} color="#15683A" /></span>
+          <h2 class="ph">{W.okTitle}</h2>
+          <p>{W.okText}</p>
+          <a href={p('/')} class="link">{W.back}<Icon name="arrow" size={14} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script is:inline define:vars={{ INTENTS }}>
+  const intent = new URLSearchParams(location.search).get('intent') || 'signup';
+  const c = INTENTS[intent];
+  if (c) {
+    document.querySelector('[data-k]').textContent = c.kicker;
+    document.querySelector('[data-t]').textContent = c.title;
+    document.querySelector('[data-x]').textContent = c.text;
+  }
+  const hidden = document.querySelector('[data-intent]');
+  if (hidden) hidden.value = c ? intent : 'signup';
+</script>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-form]')!;
+  const ok = document.querySelector<HTMLElement>('[data-ok]')!;
+  const err = document.querySelector<HTMLElement>('[data-err]')!;
+  const btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+  const show = (msg: string) => { err.textContent = msg; err.hidden = !msg; };
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (form.dataset.connected !== 'yes') return;
+    const email = form.querySelector<HTMLInputElement>('input[name=email]')!;
+    if (!email.value.trim() || !email.checkValidity()) { show(form.dataset.errEmail!); email.focus(); return; }
+    show(''); btn.disabled = true; btn.textContent = form.dataset.sending!;
+    try {
+      const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+      if (!res.ok) throw new Error(String(res.status));
+      form.hidden = true; ok.hidden = false; ok.focus();
+    } catch {
+      show(form.dataset.errSend!);
+      btn.disabled = false; btn.textContent = form.dataset.submit!;
+    }
+  });
+</script>
+
+<style>
+  .wl { background: var(--wash); position: relative; overflow: hidden; }
+  .wl::before { content: ''; position: absolute; inset: 0; background: radial-gradient(45% 90% at 100% 0%, rgba(47, 102, 242, 0.14), rgba(47, 102, 242, 0) 70%); pointer-events: none; }
+  .grid { position: relative; padding-block: clamp(48px, 7vw, 96px) clamp(64px, 8vw, 112px); display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: 48px 80px; align-items: center; }
+  .copy { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+  .copy .lead { max-width: 600px; }
+  .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--cobalt); box-shadow: 0 0 0 4px rgba(31, 79, 216, 0.18); }
+  .meanwhile { font-size: 15px; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .panel { padding: 32px; box-shadow: var(--shadow-card); border: 0; }
+  form, .ok { display: flex; flex-direction: column; gap: 16px; }
+  .ph { font-size: 22px; line-height: 28px; font-weight: 600; }
+  .field { display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; }
+  .field em { font-style: normal; font-weight: 400; color: var(--ink-3); }
+  .field input { height: 52px; padding: 0 16px; border-radius: 12px; border: 1px solid #C9D2DD; font: inherit; font-size: 16px; font-weight: 400; color: var(--ink); background: #fff; }
+  /* Emails are typed left to right, even on the Arabic page; the text stays on the label's side. */
+  .field input[type='email'] { direction: ltr; }
+  :global([dir='rtl']) .field input[type='email'] { text-align: right; }
+  .field input:focus { outline: 3px solid var(--cobalt-bright); outline-offset: 1px; border-color: transparent; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .err { font-size: 14px; color: #B42318; }
+  .btn:disabled { background: #C9D2DD; color: #fff; cursor: not-allowed; }
+  .fine { font-size: 13px; line-height: 20px; color: var(--ink-3); }
+  .fine a { color: var(--ink-2); }
+  .fine.off { color: var(--ink-2); }
+  .ok { align-items: flex-start; }
+  .ok:focus { outline: none; }
+  .ok p { font-size: 16px; color: var(--ink-2); }
+  .okic { width: 48px; height: 48px; border-radius: 999px; background: var(--ok-tint); display: flex; align-items: center; justify-content: center; }
+  @media (max-width: 1099px) { .grid { grid-template-columns: 1fr; } .panel { max-width: 560px; } }
+  @media (max-width: 600px) { .panel { padding: 24px; } }
+</style>

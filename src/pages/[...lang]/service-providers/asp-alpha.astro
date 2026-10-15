@@ -1,0 +1,73 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Icon from '../../../components/Icon.astro';
+import Band from '../../../components/site/Band.astro';
+import { langPaths, useI18n } from '../../../i18n';
+export const getStaticPaths = langPaths;
+const { t, p, w } = useI18n(Astro.url);
+const x = t.partners.alpha;
+---
+<Base title={x.title} active="partners">
+  <section class="intro">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href={p('/service-providers')}>{x.crumb}</a><span aria-hidden="true">/</span><span aria-current="page">ASP Alpha</span></nav>
+      <div class="title-row">
+        <span class="ini" aria-hidden="true">A</span>
+        <h1 class="h-page">ASP Alpha</h1>
+        <span class="pill pill-ok"><Icon name="check" size={12} color="#15683A" />{x.connected}</span>
+        <span class="pill" style="background: var(--cobalt-ink); color: #fff">{x.strength}</span>
+      </div>
+      <p class="lead">{x.lead}</p>
+      <div class="cta"><a href={w('asp-alpha')} class="btn btn-primary">{x.cta}</a><span>{x.ctaNote}</span></div>
+    </div>
+  </section>
+  <section class="wrap tiles">
+    {x.tiles.map(([k, v, s, hot]) => <div class="tile card"><span class="k">{k}</span><b class:list={{ hot }}>{v}</b><span class="s">{s}</span></div>)}
+  </section>
+  <section class="wrap body">
+    <div class="stack gap48">
+      <div class="stack gap20"><div class="stack gap10"><span class="kicker">{x.inclKicker}</span><h2 class="h-block">{x.inclTitle}</h2></div>
+        <ul class="ticks incl">{x.incl.map((item) => <li><Icon name="check" size={18} color="#1F4FD8" />{item}</li>)}</ul></div>
+      <div class="stack gap20"><div class="stack gap10"><span class="kicker">{x.stepsKicker}</span><h2 class="h-block">{x.stepsTitle}</h2></div>
+        <ol class="steps">{x.steps.map(([title, d], i) => <li><span class="n">{i + 1}</span><span class="stack gap4"><b>{title}</b><span>{d}</span></span></li>)}</ol></div>
+    </div>
+    <aside class="others">
+      <b>{x.others}</b>
+      {t.partners.list.slice(1).map((c) => (
+        <a href={p('/service-providers')} class="other"><span class="mini" aria-hidden="true">{c.ini}</span><span class="stack grow"><b>{c.name}</b><span>{c.strength}</span></span><Icon name="arrow" size={14} /></a>
+      ))}
+      <a href={p('/service-providers')} class="link small">{x.compare}<Icon name="arrow" size={14} /></a>
+      <p class="fine">{x.samples}</p>
+    </aside>
+  </section>
+  <Band title={x.bandTitle} text={x.bandText} href={w('asp-alpha')} />
+</Base>
+
+<style>
+  .gap4 { gap: 4px; } .gap10 { gap: 10px; } .gap20 { gap: 20px; } .gap48 { gap: 48px; } .grow { flex: 1 1 auto; }
+  .title-row { display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap; }
+  .ini { width: 64px; height: 64px; border-radius: 16px; background: var(--cobalt); color: #fff; display: flex; align-items: center; justify-content: center; font: 800 28px var(--display); }
+  .cta { display: flex; align-items: center; gap: 12px 16px; padding-top: 10px; flex-wrap: wrap; font-size: 15px; color: var(--ink-2); }
+  .tiles { padding-block: 48px 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .tile { display: flex; flex-direction: column; gap: 6px; padding: 22px 24px; }
+  .tile .k, .tile .s { font-size: 13px; color: var(--ink-3); }
+  .tile .s { color: var(--ink-2); }
+  .tile b { font: 800 30px/36px var(--display); letter-spacing: -0.02em; color: var(--navy); }
+  .tile b.hot { color: var(--cobalt-ink); }
+  .body { padding-block: 56px 80px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 48px 64px; align-items: start; }
+  .incl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 32px; }
+  .steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 20px; }
+  .steps li { display: flex; gap: 16px; }
+  .steps b { font-size: 17px; font-weight: 600; }
+  .steps span span { font-size: 15px; line-height: 23px; color: var(--ink-2); }
+  .n { width: 32px; height: 32px; flex: 0 0 auto; border-radius: 999px; background: var(--cobalt); color: #fff; display: flex; align-items: center; justify-content: center; font: 700 15px var(--display); }
+  .others { display: flex; flex-direction: column; gap: 14px; padding: 24px; border-radius: var(--radius); background: var(--paper-2); }
+  .other { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line); background: #fff; text-decoration: none; }
+  .other:hover { border-color: var(--cobalt-soft); }
+  .other span span { font-size: 13px; color: var(--ink-3); }
+  .mini { width: 36px; height: 36px; border-radius: 10px; background: var(--cobalt-tint); color: var(--cobalt-ink); display: flex; align-items: center; justify-content: center; font: 800 15px var(--display); }
+  .small { font-size: 14px; }
+  .fine { font-size: 12px; color: var(--ink-3); }
+  @media (max-width: 1099px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } .body { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) { .incl { grid-template-columns: 1fr; } .tile b { font-size: 24px; line-height: 30px; } .ini { width: 52px; height: 52px; font-size: 22px; } }
+</style>

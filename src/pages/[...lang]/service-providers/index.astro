@@ -1,0 +1,130 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Icon from '../../../components/Icon.astro';
+import Band from '../../../components/site/Band.astro';
+import { OFFICIAL } from '../../../config';
+import { langPaths, useI18n } from '../../../i18n';
+export const getStaticPaths = langPaths;
+const { t, p, w } = useI18n(Astro.url);
+const x = t.partners.page;
+const detail: Record<number, string> = { 0: p('/service-providers/asp-alpha') };
+const sorts = Object.entries(x.sorts);
+---
+<Base title={x.title} active="partners" description={x.desc}>
+  <section class="intro">
+    <div class="wrap">
+      <span class="kicker">{x.kicker}</span>
+      <h1 class="h-page">{x.h1}</h1>
+      <p class="lead">{x.lead}</p>
+    </div>
+  </section>
+
+  <section class="wrap list-sec">
+    <div class="chips" role="group" aria-label={x.sortLabel}>
+      {sorts.map(([k, label], i) => <button type="button" class="chip" data-sort={k} aria-pressed={i === 0 ? 'true' : 'false'}>{label}</button>)}
+    </div>
+    <div class="rows" data-rows>
+      {t.partners.list.map((c, i) => (
+        <article class="prow card" data-i={i} data-price={c.price} data-accept={c.accept} data-days={c.days} data-arabic={c.arabic ? 'yes' : 'no'}>
+          <div class="who">
+            <span class="ini" aria-hidden="true">{c.ini}</span>
+            <div class="stack gap6">
+              <h2 class="name">{c.name}</h2>
+              <span class="connected"><Icon name="check" size={12} color="#15683A" />{x.connected}</span>
+              <p class="blurb">{c.blurb}</p>
+            </div>
+          </div>
+          <dl class="metrics">
+            {c.metrics.map(([k, v, hot]) => <div><dt>{k}</dt><dd class:list={['mono', { hot }]}>{v}</dd></div>)}
+            <div><dt>{x.languages}</dt><dd>{c.langs}</dd></div>
+          </dl>
+          <div class="side">
+            <span class="pill pill-tint">{c.strength}</span>
+            {detail[i] ? <a href={detail[i]} class="link">{x.view(c.name)}<Icon name="arrow" size={14} /></a> : <a href={w('asp')} class="link">{x.choose(c.name)}<Icon name="arrow" size={14} /></a>}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap compare-sec">
+    <div class="stack gap10">
+      <span class="kicker">{x.compareKicker}</span>
+      <h2 class="h-block">{x.compareTitle}</h2>
+      <p class="sub">{x.compareSub}</p>
+    </div>
+    <p class="hint">{x.hint}</p>
+    <div class="table-wrap card">
+      <table>
+        <thead><tr><th scope="col" class="muted">{x.sample}</th>{t.partners.list.map((c) => <th scope="col">{c.name}</th>)}</tr></thead>
+        <tbody>
+          {x.rows.map(([k, vals]) => (
+            <tr><th scope="row">{k}</th>{vals.map((v) => <td>{v === true ? <Icon name="check" size={18} color="#15683A" /> : v === false ? <span class="dash">—</span> : v}</td>)}</tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="official"><Icon name="external" size={14} />{x.officialBefore}<a href={OFFICIAL.mofAsps.url} target="_blank" rel="noopener noreferrer" class="link">{x.officialLink}</a></p>
+  </section>
+
+  <Band title={x.bandTitle} text={x.bandText} href={w('asp')} />
+</Base>
+
+<style>
+  .gap6 { gap: 6px; } .gap10 { gap: 10px; }
+  .list-sec { padding-block: 56px 24px; display: flex; flex-direction: column; gap: 24px; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { height: 36px; padding: 0 16px; display: inline-flex; align-items: center; border: 0; border-radius: 999px; background: #fff; color: var(--ink); font-size: 14px; font-weight: 600; box-shadow: inset 0 0 0 1px #D5DAE0; cursor: pointer; }
+  .chip:hover { box-shadow: inset 0 0 0 1px var(--ink-3); }
+  .chip[aria-pressed='true'] { background: var(--ink); color: #fff; box-shadow: none; }
+  .rows { display: flex; flex-direction: column; gap: 16px; }
+  .prow { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr) auto; align-items: center; gap: 24px 40px; padding: 28px 32px; box-shadow: 0 16px 40px rgba(11,31,92,0.06); }
+  .who { display: flex; gap: 16px; align-items: flex-start; }
+  .ini { width: 52px; height: 52px; flex: 0 0 auto; border-radius: 14px; background: var(--cobalt); color: #fff; display: flex; align-items: center; justify-content: center; font: 800 22px var(--display); }
+  .name { font-size: 22px; line-height: 28px; font-weight: 600; }
+  .connected { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; color: var(--ok); }
+  .blurb { font-size: 15px; line-height: 22px; color: var(--ink-2); }
+  .metrics { margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .metrics dt { font-size: 12px; color: var(--ink-3); }
+  .metrics dd { margin: 4px 0 0; font-size: 15px; font-weight: 500; }
+  .metrics dd.mono { font-size: 18px; font-weight: 400; }
+  .metrics dd.hot { font-weight: 600; color: var(--cobalt-ink); }
+  .side { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+  .side .link { white-space: nowrap; }
+  .hint { display: none; font-size: 13px; color: var(--ink-3); }
+  .compare-sec { padding-block: 56px 72px; display: flex; flex-direction: column; gap: 28px; }
+  .sub { max-width: 720px; font-size: 17px; line-height: 26px; color: var(--ink-2); }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; min-width: 640px; border-collapse: collapse; }
+  thead { background: var(--paper-2); }
+  th, td { padding: 14px 20px; text-align: start; font-size: 15px; }
+  thead th { padding-block: 18px; font-weight: 600; }
+  thead th.muted { width: 34%; font-size: 13px; color: var(--ink-3); }
+  tbody tr { border-top: 1px solid var(--line-soft); }
+  tbody th { font-weight: 500; color: var(--ink-2); }
+  td { font-variant-numeric: tabular-nums; }
+  .dash { color: #9AA3A8; }
+  .official { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 15px; color: var(--ink-2); }
+  @media (max-width: 1099px) {
+    .prow { grid-template-columns: 1fr; padding: 20px; }
+    .side { flex-direction: row; justify-content: space-between; align-items: center; }
+    .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 14px; border-top: 1px solid var(--line-soft); }
+  }
+  @media (max-width: 700px) { .hint { display: block; margin-bottom: -16px; } }
+</style>
+
+<script>
+  const rows = [...document.querySelectorAll<HTMLElement>('[data-rows] > article')];
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-sort]')];
+  const by: Record<string, (a: HTMLElement, b: HTMLElement) => number> = {
+    price: (a, b) => +a.dataset.price! - +b.dataset.price!,
+    days: (a, b) => +a.dataset.days! - +b.dataset.days!,
+    accept: (a, b) => +b.dataset.accept! - +a.dataset.accept!,
+  };
+  chips.forEach((chip) => chip.addEventListener('click', () => {
+    const k = chip.dataset.sort!;
+    chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+    const order = [...rows].sort(by[k] ?? ((a, b) => +a.dataset.i! - +b.dataset.i!));
+    rows.forEach((r) => { r.style.order = String(order.indexOf(r)); r.hidden = k === 'arabic' && r.dataset.arabic !== 'yes'; });
+  }));
+</script>

@@ -1,0 +1,149 @@
+---
+import { BANDS, fmtDate, months, pct } from '../../data/dates';
+import { OFFICIAL } from '../../config';
+import { useI18n } from '../../i18n';
+const { t, lang } = useI18n(Astro.url);
+const x = t.home.timeline;
+// Chinese dates are wide; on the desktop track the year goes on its own small line above the day.
+const split = (ms: number) => { const full = fmtDate(ms, lang); const m = lang === 'zh' ? full.match(/^(\d{4}年)(.+)$/) : null; return { date: full, year: m ? m[1] : '', day: m ? m[2] : full }; };
+const LANES = BANDS.map((b, i) => ({ label: t.dates.bands[i], a: { ...b.a, ...split(b.a.t) }, g: { ...b.g, ...split(b.g.t) } }));
+const MONTHS = months(lang);
+// Values at build time; the script below replaces them with today's in the browser.
+const now = new Date();
+const buildToday = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+---
+<section class="tl" data-today-root style={`--today: ${pct(buildToday)}`}>
+  <div class="wrap inner">
+    <div class="head">
+      <span class="kicker on-dark">{x.kicker}</span>
+      <h2 class="h-block title">{x.title}</h2>
+      <p class="sub">{x.sub}</p>
+    </div>
+
+    <!-- desktop: one horizontal track per revenue band -->
+    <div class="desk">
+      <div class="axis"><span class="today-pill" data-today-label>{x.today}</span></div>
+      {LANES.map((l) => (
+        <div class="lane">
+          <div class="lane-label"><span class="eyebrow">{x.revenue}</span><b>{l.label}</b></div>
+          <div class="track">
+            <span class="rail" aria-hidden="true"></span>
+            <span class="fill" aria-hidden="true"></span>
+            {[l.a, l.g].map((m) => (
+              <div class="ms" style={`inset-inline-start: ${pct(m.t)}`}>
+                <span class="kind">{m.appoint ? x.appoint : x.mandatory}</span>
+                <span class:list={['dot', { appoint: m.appoint }]} aria-hidden="true"></span>
+                <div class="when"><b>{m.year && <small class="yr">{m.year}</small>}{m.day}</b><span class="chip" data-chip={m.key}></span></div>
+              </div>
+            ))}
+            <span class="pulse" aria-hidden="true"></span>
+          </div>
+        </div>
+      ))}
+      <div class="axis months" aria-hidden="true">{MONTHS.map((m) => <span style={`inset-inline-start: ${m.pos}`}>{m.label}</span>)}</div>
+    </div>
+
+    <!-- mobile: one card per revenue band -->
+    <div class="mob">
+      <span class="today-pill static" data-today-label>{x.today}</span>
+      {LANES.map((l) => (
+        <div class="mcard">
+          <span class="eyebrow">{x.revenue}</span>
+          <b class="mlabel">{l.label}</b>
+          <div class="mtrack" aria-hidden="true">
+            <span class="rail"></span><span class="fill"></span>
+            <span class="mdot appoint" style={`inset-inline-start: ${pct(l.a.t)}`}></span>
+            <span class="mdot" style={`inset-inline-start: ${pct(l.g.t)}`}></span>
+            <span class="pulse"></span>
+          </div>
+          {[l.a, l.g].map((m) => (
+            <div class="mrow">
+              <span class="mleft"><span class:list={['dot', 'static', { appoint: m.appoint }]} aria-hidden="true"></span>
+                <span class="stack"><span class="mkind">{m.appoint ? x.appoint : x.mandatory}</span><b class="mdate">{m.date}</b></span></span>
+              <span class="chip" data-chip={m.key}></span>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+
+    <p class="foot">{x.footBefore}<a href={OFFICIAL.mofEinvoicing.url} target="_blank" rel="noopener noreferrer">{x.footLink}</a>{x.footAfter}</p>
+  </div>
+</section>
+
+<script>
+  import { applyLiveDates } from '../../scripts/dates';
+  applyLiveDates();
+</script>
+
+<style>
+  /* Positions run from the start edge; --shift centres a marker on its point in either direction. */
+  .tl { --shift: -50%; position: relative; overflow: hidden; color: #fff; background: radial-gradient(55% 75% at 88% 0%, rgba(143,176,255,0.38), rgba(143,176,255,0) 62%), linear-gradient(160deg, #2457E6 0%, #1A44C2 55%, #1638A6 100%); }
+  .inner { padding-block: 72px 56px; display: flex; flex-direction: column; gap: 32px; }
+  .head { display: flex; flex-direction: column; gap: 10px; }
+  .kicker.on-dark { color: #DCE6FF; }
+  .title { font-size: clamp(30px, 3.2vw, 44px); }
+  .sub { font-size: 18px; line-height: 27px; color: #E6ECFF; }
+  .eyebrow { font: 500 11px/16px var(--mono); letter-spacing: 0.08em; color: #DCE6FF; }
+  .today-pill { position: absolute; inset-inline-start: var(--today); top: 0; transform: translateX(var(--shift)); display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; background: #fff; color: var(--cobalt-ink); font: 500 11px var(--mono); letter-spacing: 0.06em; white-space: nowrap; }
+  .chip { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; background: rgba(255,255,255,0.16); color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .chip:empty { visibility: hidden; }
+  .chip[data-state='hot'] { background: #fff; color: var(--cobalt-ink); }
+  .chip[data-state='late'] { background: #fff; color: var(--warn); }
+  .dot { position: absolute; inset-inline-start: 0; top: 41px; width: 16px; height: 16px; border-radius: 999px; transform: translate(var(--shift), -50%); background: #fff; }
+  .dot.appoint { background: #1A44C2; border: 3px solid #fff; }
+  .pulse { position: absolute; inset-inline-start: var(--today); top: 41.5px; width: 10px; height: 10px; border-radius: 999px; background: #fff; transform: translate(var(--shift), -50%); animation: tl-pulse 2.2s ease-out infinite; }
+  @keyframes tl-pulse { 0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.7); } 100% { box-shadow: 0 0 0 14px rgba(255,255,255,0); } }
+  @media (prefers-reduced-motion: reduce) { .pulse { animation: none; } }
+
+  /* desktop */
+  .desk { display: flex; flex-direction: column; gap: 10px; }
+  .axis { position: relative; height: 26px; margin-inline: 288px 24px; }
+  .lane { display: flex; align-items: stretch; gap: 24px; height: 128px; padding: 0 24px; border-radius: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); }
+  .lane-label { width: 240px; flex: 0 0 auto; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
+  .lane-label b { font-size: 24px; line-height: 30px; font-weight: 600; }
+  .track { position: relative; flex: 1 1 auto; }
+  .rail, .fill { position: absolute; top: 40px; height: 3px; border-radius: 999px; }
+  .rail { inset-inline: 0; background: rgba(255,255,255,0.3); }
+  .fill { inset-inline-start: 0; width: var(--today); background: #fff; }
+  .ms { position: absolute; top: 0; bottom: 0; }
+  .kind { position: absolute; inset-inline-start: -8px; top: 12px; font-size: 13px; line-height: 16px; color: #DCE6FF; white-space: nowrap; }
+  .when { position: absolute; inset-inline-start: -8px; top: 58px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+  .when b { font-family: var(--display); font-size: 24px; line-height: 28px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
+  .months { height: 16px; }
+  .months span { position: absolute; top: 0; transform: translateX(var(--shift)); font: 11px var(--mono); letter-spacing: 0.06em; color: #DCE6FF; white-space: nowrap; }
+  .foot { font-size: 14px; line-height: 20px; color: #DCE6FF; }
+  .foot a { color: #fff; font-weight: 600; }
+
+  /* mobile */
+  .mob { display: none; flex-direction: column; gap: 14px; }
+  .today-pill.static { position: static; transform: none; align-self: flex-start; height: 26px; padding: 0 12px; }
+  .mcard { display: flex; flex-direction: column; padding: 16px 16px 4px; border-radius: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); }
+  .mlabel { font-size: 20px; line-height: 26px; font-weight: 600; margin-bottom: 10px; }
+  .mtrack { position: relative; height: 14px; margin: 2px 0 6px; }
+  .mtrack .rail, .mtrack .fill { top: 6px; }
+  .mtrack .pulse { top: 7.5px; width: 8px; height: 8px; }
+  .mdot { position: absolute; top: 7.5px; width: 12px; height: 12px; border-radius: 999px; transform: translate(var(--shift), -50%); background: #fff; }
+  .mdot.appoint { background: #1A44C2; border: 2.5px solid #fff; }
+  .mrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.16); }
+  .mleft { display: flex; align-items: center; gap: 10px; }
+  .dot.static { position: static; transform: none; width: 14px; height: 14px; flex: 0 0 auto; }
+  .dot.static.appoint { border-width: 2.5px; }
+  .mkind { font-size: 12px; line-height: 16px; color: #DCE6FF; }
+  .mdate { font-family: var(--display); font-size: 20px; line-height: 24px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
+
+  @media (max-width: 1099px) {
+    .inner { padding-block: 56px 48px; gap: 20px; }
+    .desk { display: none; }
+    .mob { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .mob .today-pill { grid-column: 1 / -1; }
+  }
+  @media (max-width: 767px) {
+    .mob { display: flex; }
+    .sub { font-size: 16px; line-height: 24px; }
+    .foot { font-size: 13px; line-height: 19px; }
+  }
+  :lang(zh) .lane { height: 148px; }
+  :global([dir='rtl']) .tl { --shift: 50%; }
+  .when .yr { display: block; font-size: 13px; line-height: 16px; font-weight: 600; opacity: 0.8; }
+</style>

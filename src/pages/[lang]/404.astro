@@ -1,0 +1,6 @@
+---
+import NotFound from '../../components/site/NotFound.astro';
+import { LIVE } from '../../i18n';
+export const getStaticPaths = () => LIVE.filter((l) => l !== 'en').map((lang) => ({ params: { lang } }));
+---
+<NotFound />

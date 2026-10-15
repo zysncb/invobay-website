@@ -1,0 +1,97 @@
+---
+import Header from '../Header.astro';
+import HeroScene from './HeroScene.astro';
+import Icon from '../Icon.astro';
+import { useI18n } from '../../i18n';
+const { t, w } = useI18n(Astro.url);
+const h = t.home.hero;
+---
+<section class="hero">
+  <div class="ground" aria-hidden="true">
+    <div class="ground-glow"></div>
+    <div class="hx-anim hx-floor"><div class="hx-plane"></div></div>
+    <div class="ground-fade"></div>
+  </div>
+  <Header tone="dark" overlay />
+  <div class="hero-scene"><HeroScene /></div>
+  <div class="wrap hero-copy">
+    <h1 class="h-hero">{h.h1Before}<span class="nowrap">{h.h1Nowrap}</span>{h.h1After}</h1>
+    <p class="lead on-dark">{h.lead}</p>
+    <div class="cta">
+      <a href={w('signup')} class="btn btn-light btn-lg">{h.cta}</a>
+    </div>
+  </div>
+  <div class="wrap legend">
+    <span class="legend-title">{h.legend}</span>
+    <ol>
+      {h.steps.map((step, i) => (
+        <li class={`step s${i + 1}`}><span class="n">{i < h.steps.length - 1 ? i + 1 : <Icon name="report" size={12} color="#fff" />}</span>{step}{i === 0 && <span class="checked"><Icon name="check" size={10} color="#15683A" />{h.checked}</span>}</li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .hero { position: relative; overflow: hidden; min-height: 820px; background: var(--navy); color: #fff; display: flex; flex-direction: column; }
+  .ground { position: absolute; inset: 0; }
+  .ground-glow { position: absolute; inset: 0; background: radial-gradient(56% 64% at 76% 46%, rgba(47,102,242,0.50) 0%, rgba(31,79,216,0.16) 48%, rgba(11,31,92,0) 72%), linear-gradient(180deg, #0B1F5C 0%, #081747 100%); }
+  .ground-fade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11,31,92,0.92) 0%, rgba(11,31,92,0.78) 34%, rgba(11,31,92,0) 58%); }
+  .hero-scene { position: absolute; top: 80px; inset-inline-end: 0; width: min(820px, 57vw); }
+  .hero-copy { position: relative; flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 26px; padding-top: 80px; }
+  .hero-copy > * { max-width: 640px; }
+  .hero-copy .lead { max-width: 520px; color: #F0F4FF; font-size: clamp(17px, 1.4vw, 20px); }
+  .cta { margin-top: 6px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .legend { display: none; }
+
+  @media (max-width: 1099px) {
+    .hero { min-height: 0; }
+    .ground-fade { background: linear-gradient(180deg, rgba(11,31,92,0.6) 0%, rgba(11,31,92,0) 40%); }
+    .hero-copy { padding-top: 132px; justify-content: flex-start; }
+    .hero-scene { position: relative; top: auto; inset-inline-end: auto; order: 3; width: min(760px, 100%); margin: 24px auto 40px; }
+  }
+  @media (max-width: 767px) {
+    .hero-copy { padding-top: 92px; gap: 16px; }
+    .hero-copy .h-hero { font-size: 36px; line-height: 42px; }
+    .cta { align-self: stretch; }
+    .cta .btn { width: 100%; }
+    .hero-scene { margin: 16px -10px 0; width: calc(100% + 20px); }
+    .legend { display: flex; flex-direction: column; gap: 12px; order: 4; padding-bottom: 40px; position: relative; }
+    .legend-title { font: 500 11px/16px var(--mono); letter-spacing: 0.08em; color: var(--cobalt-soft); }
+    .legend ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+    .legend li { display: flex; align-items: center; gap: 10px; font-size: 15px; line-height: 20px; color: #F0F4FF; flex-wrap: wrap; }
+    .n { width: 22px; height: 22px; flex: 0 0 auto; border-radius: 999px; background: var(--cobalt-bright); display: inline-flex; align-items: center; justify-content: center; font: 700 11px var(--mono); color: #fff; }
+    .checked { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 999px; background: #fff; color: var(--ok); font-size: 11px; font-weight: 600; }
+    /* The list follows the scene above: same 12 s cycle and the same moments as the step markers (d-l1…d-l5) and the check badge (d-b1). */
+    .legend li.step { margin-inline: -8px; padding: 5px 10px 5px 8px; border-radius: 999px; color: rgba(240, 244, 255, 0.72); }
+    .legend li.step, .legend li.step .n { animation-duration: 12s; animation-timing-function: ease-in-out; animation-iteration-count: infinite; }
+    .legend li.step .n { background: rgba(47, 102, 242, 0.38); }
+    .legend li.s1 { animation-name: lg-s1; } .legend li.s2 { animation-name: lg-s2; } .legend li.s3 { animation-name: lg-s3; }
+    .legend li.s4 { animation-name: lg-s4; } .legend li.s5 { animation-name: lg-s5; }
+    .legend li.s1 .n { animation-name: lg-n1; } .legend li.s2 .n { animation-name: lg-n2; } .legend li.s3 .n { animation-name: lg-n3; }
+    .legend li.s4 .n { animation-name: lg-n4; } .legend li.s5 .n { animation-name: lg-n5; }
+    .legend .checked { animation: lg-chip 12s cubic-bezier(.2, .8, .2, 1) infinite; }
+  }
+  @keyframes lg-s1 { 0%, 12% { background: rgba(47, 102, 242, 0.32); color: #fff; } 15%, 100% { background: transparent; color: rgba(240, 244, 255, 0.72); } }
+  @keyframes lg-s2 { 0%, 20% { background: transparent; color: rgba(240, 244, 255, 0.72); } 22%, 40% { background: rgba(47, 102, 242, 0.32); color: #fff; } 43%, 100% { background: transparent; color: rgba(240, 244, 255, 0.72); } }
+  @keyframes lg-s3 { 0%, 46% { background: transparent; color: rgba(240, 244, 255, 0.72); } 48%, 62% { background: rgba(47, 102, 242, 0.32); color: #fff; } 65%, 100% { background: transparent; color: rgba(240, 244, 255, 0.72); } }
+  @keyframes lg-s4 { 0%, 64% { background: transparent; color: rgba(240, 244, 255, 0.72); } 66%, 92% { background: rgba(47, 102, 242, 0.32); color: #fff; } 95%, 100% { background: transparent; color: rgba(240, 244, 255, 0.72); } }
+  @keyframes lg-s5 { 0%, 32% { background: transparent; color: rgba(240, 244, 255, 0.72); } 34%, 44% { background: rgba(47, 102, 242, 0.32); color: #fff; } 47%, 58% { background: transparent; color: rgba(240, 244, 255, 0.72); } 60%, 70% { background: rgba(47, 102, 242, 0.32); color: #fff; } 73%, 100% { background: transparent; color: rgba(240, 244, 255, 0.72); } }
+  @keyframes lg-n1 { 0%, 12% { background: #2F66F2; } 15%, 100% { background: rgba(47, 102, 242, 0.38); } }
+  @keyframes lg-n2 { 0%, 20% { background: rgba(47, 102, 242, 0.38); } 22%, 40% { background: #2F66F2; } 43%, 100% { background: rgba(47, 102, 242, 0.38); } }
+  @keyframes lg-n3 { 0%, 46% { background: rgba(47, 102, 242, 0.38); } 48%, 62% { background: #2F66F2; } 65%, 100% { background: rgba(47, 102, 242, 0.38); } }
+  @keyframes lg-n4 { 0%, 64% { background: rgba(47, 102, 242, 0.38); } 66%, 92% { background: #2F66F2; } 95%, 100% { background: rgba(47, 102, 242, 0.38); } }
+  @keyframes lg-n5 { 0%, 32% { background: rgba(47, 102, 242, 0.38); } 34%, 44% { background: #2F66F2; } 47%, 58% { background: rgba(47, 102, 242, 0.38); } 60%, 70% { background: #2F66F2; } 73%, 100% { background: rgba(47, 102, 242, 0.38); } }
+  @keyframes lg-chip { 0%, 16% { opacity: 0; } 19%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .legend li.step, .legend li.step .n, .legend .checked { animation: none; }
+    .legend li.step { color: #F0F4FF; }
+    .legend li.step .n { background: var(--cobalt-bright); }
+  }
+</style>
+<style is:global>
+  [dir='rtl'] .hero .ground-glow { background: radial-gradient(56% 64% at 24% 46%, rgba(47,102,242,0.50) 0%, rgba(31,79,216,0.16) 48%, rgba(11,31,92,0) 72%), linear-gradient(180deg, #0B1F5C 0%, #081747 100%); }
+  @media (min-width: 1100px) { [dir='rtl'] .hero .ground-fade { background: linear-gradient(270deg, rgba(11,31,92,0.92) 0%, rgba(11,31,92,0.78) 34%, rgba(11,31,92,0) 58%); } }
+  .scene-svg { display: block; width: 100%; height: auto; }
+  .scene-mob { display: none; }
+  @media (max-width: 767px) { .scene-desk { display: none; } .scene-mob { display: block; } }
+</style>

@@ -1,0 +1,122 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import Band from '../../components/site/Band.astro';
+import { langPaths, useI18n } from '../../i18n';
+export const getStaticPaths = langPaths;
+const { t, p, w } = useI18n(Astro.url);
+const P = t.pricing;
+const intents = ['signup', 'plan-monthly', 'plan-yearly'];
+const plans = P.plans.map((pl, i) => ({ ...pl, items: i === 0 ? P.free : P.member, missing: i === 0 ? P.freeMissing : [], href: w(intents[i]), featured: i === 2, free: i === 0 }));
+const addons = P.addons;
+const credits = P.credits;
+---
+<Base title={P.title} active="pricing" description={P.desc}>
+  <section class="intro">
+    <div class="wrap">
+      <span class="kicker">{P.kicker}</span>
+      <h1 class="h-page">{P.h1}</h1>
+      <p class="lead">{P.lead}</p>
+    </div>
+  </section>
+
+  <section class="wrap plans-sec">
+    <div class="plans">
+      {plans.map((p) => (
+        <article class:list={['plan', { featured: p.featured }]}>
+          {p.tag ? <span class="tag">{p.tag}</span> : <span class="tag-space" aria-hidden="true"></span>}
+          <div class="stack gap6">
+            <h2 class="pname">{p.name}</h2>
+            <span class="price"><b>{p.price}</b>{p.unit && <span>{p.unit}</span>}</span>
+            <span class="note">{p.note}</span>
+          </div>
+          <a href={p.href} class:list={['btn', 'btn-block', p.featured ? 'btn-light' : p.free ? 'btn-secondary' : 'btn-primary']}>{p.cta}</a>
+          <ul class="ticks plist">
+            {p.items.map((item) => <li><Icon name="check" size={18} color={p.featured ? '#9DB8FF' : '#1F4FD8'} />{item}</li>)}
+            {p.missing.map((item) => <li class="off"><Icon name="cross" size={18} color="#9AA3A8" /><span><span class="sr-only">{P.notIncluded}</span>{item}</span></li>)}
+          </ul>
+        </article>
+      ))}
+    </div>
+    <p class="fine">{P.fine}</p>
+  </section>
+
+  <section class="wrap addons-sec">
+    <div class="stack gap10"><span class="kicker">{P.addonsKicker}</span><h2 class="h-block">{P.addonsTitle}</h2></div>
+    <div class="addons">
+      {addons.map(([n, price, unit, text]) => (
+        <div class="addon card">
+          <span class="row"><b>{n}</b><span class="pill pill-tint">{P.membersPill}</span></span>
+          <span class="aprice"><b>{price}</b><span>{unit}</span></span>
+          <span class="atext">{text}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="credits-sec">
+    <div class="wrap">
+      <div class="stack gap10"><span class="kicker">{P.creditsKicker}</span><h2 class="h-block">{P.creditsTitle}</h2></div>
+      <div class="credits">
+        {credits.map(([n, title, d]) => <div class="stack gap8"><b class="cn">{n}</b><b class="ct">{title}</b><span class="cd">{d}</span></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap faq-sec">
+    <div class="stack gap16">
+      <div class="stack gap10"><span class="kicker">{P.faqKicker}</span><h2 class="h-block">{P.faqTitle}</h2></div>
+      <a href={p('/#faq')} class="link">{P.faqMore}<Icon name="arrow" size={14} /></a>
+    </div>
+    <div class="faq">
+      {P.faq.map((f) => <div class="qa"><b>{f.q}</b><span>{f.a}</span></div>)}
+    </div>
+  </section>
+
+  <Band title={P.bandTitle} text={P.bandText} href={w('signup')} />
+</Base>
+
+<style>
+  .gap6 { gap: 6px; } .gap8 { gap: 8px; } .gap10 { gap: 10px; } .gap16 { gap: 16px; }
+  .plans-sec { padding-block: 56px 72px; display: flex; flex-direction: column; gap: 24px; }
+  .plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: stretch; }
+  .plan { display: flex; flex-direction: column; gap: 20px; padding: 32px; border-radius: var(--radius); background: #fff; border: 1px solid var(--line); }
+  .plan.featured { background: var(--navy); color: #fff; border-color: var(--navy); box-shadow: 0 30px 70px rgba(11,31,92,0.25); }
+  .tag { align-self: flex-start; display: inline-flex; align-items: center; height: 26px; padding: 0 12px; border-radius: 999px; background: #fff; color: var(--cobalt-ink); font-size: 12px; font-weight: 700; }
+  .tag-space { height: 26px; }
+  .pname { font-size: 22px; line-height: 28px; font-weight: 600; }
+  .price { display: flex; align-items: baseline; gap: 8px; }
+  .price b { font: 800 44px/50px var(--display); letter-spacing: -0.03em; }
+  .price span, .note { color: var(--ink-2); font-size: 15px; }
+  .note { font-size: 14px; line-height: 21px; color: var(--ink-3); }
+  .featured .price span, .featured .note { color: #DCE6FF; }
+  .plist { padding-top: 20px; border-top: 1px solid var(--line-soft); }
+  .featured .plist { border-top-color: rgba(255,255,255,0.18); }
+  .fine { font-size: 14px; color: var(--ink-3); }
+  .addons-sec { padding-block: 0 72px; display: flex; flex-direction: column; gap: 28px; }
+  .addons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .addon { display: flex; flex-direction: column; gap: 10px; padding: 24px; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .row b { font-size: 17px; font-weight: 600; }
+  .aprice { display: flex; align-items: baseline; gap: 6px; }
+  .aprice b { font: 800 28px var(--display); letter-spacing: -0.02em; color: var(--navy); }
+  .aprice span, .atext { font-size: 14px; color: var(--ink-2); }
+  .atext { font-size: 15px; line-height: 23px; }
+  .credits-sec { background: var(--wash); }
+  .credits-sec .wrap { padding-block: 64px; display: flex; flex-direction: column; gap: 32px; }
+  .credits { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
+  .cn { font: 800 22px var(--display); color: var(--cobalt); }
+  .ct { font-size: 16px; font-weight: 600; }
+  .cd { font-size: 15px; line-height: 23px; color: var(--ink-2); }
+  .faq-sec { padding-block: 72px; display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 32px 80px; align-items: start; }
+  .faq { display: flex; flex-direction: column; border-bottom: 1px solid var(--line); }
+  .qa { display: flex; flex-direction: column; gap: 8px; padding: 24px 0; border-top: 1px solid var(--line); }
+  .qa b { font-size: 17px; font-weight: 600; }
+  .qa span { font-size: 15px; line-height: 23px; color: var(--ink-2); }
+  @media (max-width: 1099px) {
+    .plans, .addons { grid-template-columns: 1fr; max-width: 560px; }
+    .credits { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .faq-sec { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) { .credits { grid-template-columns: 1fr; gap: 24px; } .plan { padding: 24px; } .credits-sec .wrap { padding-block: 48px; } }
+</style>

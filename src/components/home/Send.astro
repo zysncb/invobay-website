@@ -1,0 +1,61 @@
+---
+import Icon from '../Icon.astro';
+import art from '../../data/art.json';
+import { useI18n } from '../../i18n';
+import { artText } from '../../i18n/art';
+const { t, p, lang } = useI18n(Astro.url);
+const x = t.home.send;
+---
+<section class="send">
+  <div class="wrap section inner">
+    <div class="text">
+      <span class="kicker">{x.kicker}</span>
+      <h2 class="h-section">{x.title}</h2>
+      <p class="lead">{x.lead}</p>
+      <div class="ours">
+        <span class="eyebrow"><svg width="14" height="14" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 10h4l3 3v25H9z" fill="#1740B3"></path><path d="M22 38V10l14 28V10" fill="none" stroke="#1740B3" stroke-width="6" stroke-linecap="square"></path></svg>{x.with}</span>
+        <ul class="ticks">{x.ours.map((item) => <li><Icon name="check" size={18} color="#1F4FD8" />{item}</li>)}</ul>
+      </div>
+      <div class="cta">
+        <a href={p('/pricing')} class="btn btn-primary">{x.cta}</a>
+        <span>{x.note}</span>
+      </div>
+    </div>
+    <div class="devices send-devices" dir="ltr" set:html={artText(art.devices, lang)} />
+  </div>
+</section>
+
+<style>
+  .send { position: relative; overflow: hidden; background: var(--wash); }
+  .send::before { content: ''; position: absolute; inset: 0; background: radial-gradient(45% 70% at 100% 50%, rgba(47,102,242,0.14), rgba(47,102,242,0) 70%); }
+  .inner { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 720px; gap: 56px; align-items: start; }
+  .text { display: flex; flex-direction: column; gap: 20px; }
+  .text .lead { max-width: 520px; }
+  .ours { display: flex; flex-direction: column; gap: 12px; padding-top: 22px; border-top: 1px solid #D5DAE0; }
+  .eyebrow { display: flex; align-items: center; gap: 8px; font: 500 12px/16px var(--mono); letter-spacing: 0.08em; color: var(--cobalt-ink); }
+  .ours .ticks { gap: 8px; }
+  .ours .ticks li { font-size: 17px; line-height: 26px; }
+  .ours .ticks li :global(svg) { margin-top: 4px; }
+  .cta { display: flex; align-items: center; gap: 12px 20px; padding-top: 8px; flex-wrap: wrap; font-size: 15px; color: var(--ink-2); }
+  .devices { align-self: center; width: 720px; }
+  @media (max-width: 1239px) {
+    .inner { grid-template-columns: 1fr; }
+    .devices { justify-self: center; }
+  }
+  @media (max-width: 767px) {
+    .text { gap: 14px; }
+    .ours .ticks li { font-size: 16px; line-height: 24px; }
+    .cta { flex-direction: column; align-items: stretch; text-align: center; }
+    .devices { width: 100%; max-width: 360px; justify-self: center; }
+  }
+</style>
+<style is:global>
+  /* phone only on small screens: keep the phone and the confirmation, drop the desktop window */
+  @media (max-width: 767px) {
+    .send-devices > div { height: 420px !important; }
+    .send-devices > div > div:nth-child(1) { left: 0 !important; width: 100% !important; }
+    .send-devices > div > div:nth-child(2) { display: none !important; }
+    .send-devices > div > div:nth-child(3) { right: auto !important; left: 50% !important; top: 0 !important; transform: translateX(-50%); }
+    .send-devices > div > div:nth-child(4) { left: 0 !important; top: 330px !important; }
+  }
+</style>

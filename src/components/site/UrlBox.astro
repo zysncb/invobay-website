@@ -1,0 +1,57 @@
+---
+import Icon from '../Icon.astro';
+import { OFFICIAL } from '../../config';
+import { useI18n } from '../../i18n';
+const { t } = useI18n(Astro.url);
+const o = t.official;
+---
+<div class="urlbox" data-urlbox data-copied={o.copied} data-copy-label={o.copy} data-failed={o.copyFailed} data-copied-live={o.copiedLive} data-failed-live={o.copyFailedLive}>
+  <span class="lock"><Icon name="lock" size={20} color="#15683A" /></span>
+  <span class="addr"><span class="cap">{o.emarataxCaption}</span><span class="host">{OFFICIAL.emaratax.host}</span></span>
+  <span class="acts">
+    <button type="button" class="copy" data-copy={OFFICIAL.emaratax.url} aria-label={o.copyAria}>
+      <span class="i-idle"><Icon name="copy" size={16} /></span><span class="i-done"><Icon name="check" size={16} /></span><span data-label>{o.copy}</span>
+    </button>
+    <a href={OFFICIAL.emaratax.url} target="_blank" rel="noopener noreferrer" class="open">{o.open}<Icon name="external" size={14} /></a>
+  </span>
+  <span class="sr-only" aria-live="polite" data-live></span>
+</div>
+
+<style>
+  .urlbox { display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 16px; border-radius: 14px; background: #fff; border: 1px solid #D5DAE0; box-shadow: 0 8px 24px rgba(11,31,92,0.06); flex-wrap: wrap; }
+  .lock { width: 40px; height: 40px; flex: 0 0 auto; border-radius: 10px; background: var(--ok-tint); display: flex; align-items: center; justify-content: center; }
+  .addr { flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .cap { font-size: 12px; line-height: 16px; color: var(--ink-3); }
+  .host { font: 500 18px/24px var(--mono); color: var(--navy); user-select: all; overflow-wrap: anywhere; }
+  .acts { display: flex; gap: 8px; flex: 0 0 auto; }
+  .copy, .open { height: 44px; padding: 0 16px; display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; font-size: 15px; font-weight: 600; white-space: nowrap; cursor: pointer; }
+  .copy { border: 0; background: #fff; color: var(--cobalt-ink); box-shadow: inset 0 0 0 1.5px var(--cobalt); }
+  .copy:hover { background: var(--cobalt-tint); }
+  .copy .i-done { display: none; }
+  .copy.done { background: var(--ok-tint); color: var(--ok); box-shadow: inset 0 0 0 1.5px #9BD3AE; }
+  .copy.done .i-idle { display: none; }
+  .copy.done .i-done { display: inline-flex; }
+  .copy span { display: inline-flex; }
+  .open { text-decoration: none; background: var(--cobalt); color: #fff; }
+  .open:hover { background: var(--cobalt-ink); }
+  @media (max-width: 600px) { .acts { width: 100%; } .copy, .open { flex: 1 1 0; justify-content: center; padding: 0 12px; } }
+</style>
+
+<script>
+  import { copyText } from '../../scripts/copy';
+  document.querySelectorAll<HTMLElement>('[data-urlbox]').forEach((box) => {
+    const btn = box.querySelector<HTMLButtonElement>('[data-copy]')!;
+    const label = box.querySelector<HTMLElement>('[data-label]')!;
+    const live = box.querySelector<HTMLElement>('[data-live]')!;
+    let timer = 0;
+    btn.addEventListener('click', async () => {
+      const ok = await copyText(btn.dataset.copy!);
+      btn.classList.toggle('done', ok);
+      const d = box.dataset;
+      label.textContent = ok ? d.copied! : d.failed!;
+      live.textContent = ok ? d.copiedLive! : d.failedLive!;
+      clearTimeout(timer);
+      timer = window.setTimeout(() => { btn.classList.remove('done'); label.textContent = box.dataset.copyLabel!; live.textContent = ''; }, 2000);
+    });
+  });
+</script>

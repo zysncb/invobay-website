@@ -1,0 +1,101 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { EMAILS, isEmail, OFFICIAL } from '../../config';
+import { langPaths, useI18n } from '../../i18n';
+export const getStaticPaths = langPaths;
+const { t, p } = useI18n(Astro.url);
+const C = t.contact;
+const teams = C.teams.map((team) => ({ ...team, email: EMAILS[team.key] }));
+---
+<Base title={C.title} description={C.desc}>
+  <section class="intro">
+    <div class="wrap">
+      <span class="kicker">{C.kicker}</span>
+      <h1 class="h-page">{C.h1}</h1>
+      <p class="lead">{C.lead}</p>
+    </div>
+  </section>
+
+  <section class="wrap layout">
+    <div class="teams">
+      <h2 class="h2">{C.emailUs}</h2>
+      {teams.map((team) => (
+        <div class="team">
+          <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d={team.icon} fill="none" stroke="#1740B3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+          <div class="stack gap6 grow">
+            <b class="tt">{team.title}</b>
+            <span class="tx">{team.text}</span>
+            <div class="acts">
+              {isEmail(team.email) ? (
+                <>
+                  <a href={`mailto:${team.email}`} class="mail"><Icon name="mail" size={16} />{team.email}</a>
+                  <button type="button" class="copy" data-copy={team.email} aria-label={C.copyAria(team.title)}><span class="i-idle"><Icon name="copy" size={16} /></span><span class="i-done"><Icon name="check" size={16} /></span><span data-label>{C.copy}</span></button>
+                </>
+              ) : <span class="ph">{team.email}</span>}
+              {team.key === 'support' && <a href={p('/#faq')} class="link">{C.common}<Icon name="arrow" size={14} /></a>}
+            </div>
+          </div>
+        </div>
+      ))}
+      <p class="addr">{C.address}</p>
+    </div>
+
+    <aside class="self">
+      <span class="kicker">{C.selfKicker}</span>
+      {C.self.map((x) => <a href={p(x.h)} class="go"><b>{x.t}</b><span>{x.d}</span><Icon name="arrow" size={16} /></a>)}
+      <p class="fta">{C.fta}<a href={OFFICIAL.ftaEinvoicing.url} target="_blank" rel="noopener noreferrer" class="link">tax.gov.ae<Icon name="external" size={13} /></a></p>
+    </aside>
+  </section>
+  <span class="sr-only" aria-live="polite" data-live data-copy-label={C.copy} data-copied={C.copied} data-failed={C.copyFailed} data-copied-live={C.copiedLive} data-failed-live={C.copyFailedLive}></span>
+</Base>
+
+<style>
+  .gap6 { gap: 6px; } .grow { flex: 1 1 auto; min-width: 0; }
+  .layout { padding-block: 56px 88px; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 48px 72px; align-items: start; }
+  .h2 { margin: 0 0 16px; font-size: 26px; line-height: 32px; font-weight: 600; }
+  .teams { display: flex; flex-direction: column; }
+  .team { display: flex; gap: 16px; padding: 22px 0; border-top: 1px solid var(--line-soft); }
+  .ic { width: 44px; height: 44px; flex: 0 0 auto; border-radius: 12px; background: var(--cobalt-tint); display: flex; align-items: center; justify-content: center; }
+  .tt { font-size: 18px; font-weight: 600; }
+  .tx { font-size: 15px; line-height: 23px; color: var(--ink-2); }
+  .acts { display: flex; align-items: center; gap: 10px 14px; flex-wrap: wrap; padding-top: 4px; }
+  .mail { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 999px; background: var(--cobalt); color: #fff; font-size: 15px; font-weight: 600; text-decoration: none; max-width: 100%; overflow-wrap: anywhere; }
+  .mail:hover { background: var(--cobalt-ink); }
+  .copy { height: 40px; padding: 0 14px; display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 999px; background: #fff; color: var(--cobalt-ink); box-shadow: inset 0 0 0 1.5px currentColor; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .copy span { display: inline-flex; }
+  .copy .i-done { display: none; }
+  .copy.done { background: var(--ok-tint); color: var(--ok); }
+  .copy.done .i-idle { display: none; }
+  .copy.done .i-done { display: inline-flex; }
+  .ph { display: inline-flex; align-items: center; height: 40px; padding: 0 16px; border-radius: 999px; border: 1px dashed #C9D2DD; background: #FAFBFC; font: 500 14px var(--mono); color: var(--ink-3); }
+  .addr { padding-top: 22px; border-top: 1px solid var(--line-soft); font-size: 14px; line-height: 22px; color: var(--ink-3); }
+  .self { display: flex; flex-direction: column; gap: 12px; padding: 28px; border-radius: 16px; background: var(--wash); }
+  .go { position: relative; display: flex; flex-direction: column; gap: 4px; padding-block: 16px; padding-inline: 18px 44px; border-radius: 12px; background: #fff; border: 1px solid var(--line); text-decoration: none; }
+  .go:hover { border-color: var(--cobalt-soft); }
+  .go b { font-size: 16px; font-weight: 600; }
+  .go span { font-size: 14px; line-height: 21px; color: var(--ink-2); }
+  .go :global(svg) { position: absolute; inset-inline-end: 16px; top: 50%; translate: 0 -50%; color: var(--cobalt-ink); }
+  .fta { padding-top: 6px; font-size: 14px; line-height: 22px; color: var(--ink-2); }
+  .fta .link { display: inline-flex; gap: 3px; }
+  @media (max-width: 1099px) { .layout { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) { .self { padding: 20px; } }
+</style>
+
+<script>
+  import { copyText } from '../../scripts/copy';
+  const live = document.querySelector<HTMLElement>('[data-live]');
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    const label = btn.querySelector<HTMLElement>('[data-label]')!;
+    let timer = 0;
+    btn.addEventListener('click', async () => {
+      const ok = await copyText(btn.dataset.copy!);
+      btn.classList.toggle('done', ok);
+      const d = live?.dataset ?? {};
+      label.textContent = (ok ? d.copied : d.failed) ?? '';
+      if (live) live.textContent = (ok ? d.copiedLive : d.failedLive) ?? '';
+      clearTimeout(timer);
+      timer = window.setTimeout(() => { btn.classList.remove('done'); label.textContent = live?.dataset.copyLabel ?? ''; if (live) live.textContent = ''; }, 2000);
+    });
+  });
+</script>

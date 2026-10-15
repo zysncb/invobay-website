@@ -1,0 +1,83 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { LIVE, META, localize, stripLang, useI18n } from '../i18n';
+interface Props { tone?: 'light' | 'dark'; active?: string; overlay?: boolean }
+const { tone = 'light', active = '', overlay = false } = Astro.props;
+const { t, p, w, lang, meta } = useI18n(Astro.url);
+const NAV = [
+  { key: 'partners', label: t.nav.partners, href: p('/service-providers') },
+  { key: 'pricing', label: t.nav.pricing, href: p('/pricing') },
+  { key: 'help', label: t.nav.help, href: p('/#faq') },
+];
+const here = stripLang(Astro.url.pathname);
+const langs = LIVE.map((l) => ({ l, name: META[l].name, href: localize(l, here), html: META[l].html, on: l === lang }));
+---
+<header class:list={['site-header', tone, { overlay }]}>
+  <div class="bar wrap">
+    <a href={p('/')} class="home" aria-label={t.site.home}><Logo fold={tone === 'dark' ? '#8FB0FF' : '#2F66F2'} /></a>
+    <nav aria-label={t.nav.main} class="nav">
+      {NAV.map((n) => <a href={n.href} class:list={['nav-link', { on: active === n.key }]} aria-current={active === n.key ? 'page' : undefined}>{n.label}</a>)}
+    </nav>
+    {langs.length > 1 ? (
+      <details class="lang">
+        <summary aria-label={t.site.language}><Icon name="globe" />{meta.short}</summary>
+        <div class="lang-list">{langs.map((x) => <a href={x.href} hreflang={x.html} lang={x.html} class:list={{ on: x.on }} aria-current={x.on ? 'true' : undefined}>{x.name}</a>)}</div>
+      </details>
+    ) : <span class="lang static"><Icon name="globe" />{meta.short}</span>}
+    <a href={w('signin')} class="nav-link signin">{t.nav.signin}</a>
+    <details class="menu">
+      <summary aria-label={t.nav.menu}><Icon name="menu" size={22} class="open-i" /><Icon name="close" size={22} class="close-i" /></summary>
+      <div class="sheet">
+        {NAV.map((n) => <a href={n.href} class:list={['sheet-link', { on: active === n.key }]}>{n.label}</a>)}
+        <a href={p('/guides/emaratax-onboarding')} class="sheet-link">{t.nav.guide}</a>
+        <a href={p('/about')} class="sheet-link">{t.nav.about}</a>
+        <a href={p('/contact')} class="sheet-link">{t.nav.contact}</a>
+        <div class="sheet-cta">
+          <a href={w('signup')} class="btn btn-primary btn-block">{t.nav.signup}</a>
+          <a href={w('signin')} class="btn btn-secondary btn-block">{t.nav.signin}</a>
+        </div>
+      </div>
+    </details>
+  </div>
+</header>
+
+<style>
+  .site-header { position: relative; z-index: 40; background: var(--paper); border-bottom: 1px solid var(--line); color: var(--ink); }
+  .site-header.dark { background: transparent; border-bottom-color: transparent; color: #fff; }
+  .site-header.overlay { position: absolute; inset: 0 0 auto 0; }
+  .bar { height: 80px; display: flex; align-items: center; gap: 4px; }
+  .home { color: inherit; text-decoration: none; margin-inline-end: auto; display: inline-flex; }
+  .nav { display: flex; align-items: center; gap: 4px; }
+  .nav-link { height: 40px; padding: 0 14px; display: inline-flex; align-items: center; border-radius: 999px; text-decoration: none; font-size: 14px; font-weight: 500; color: inherit; }
+  .nav-link:hover { background: rgba(31, 79, 216, 0.08); }
+  .dark .nav-link:hover { background: rgba(255, 255, 255, 0.1); }
+  .nav-link.on { font-weight: 600; background: var(--cobalt-tint); color: var(--cobalt-ink); }
+  .dark .nav-link.on { background: rgba(255, 255, 255, 0.14); color: #fff; }
+  .signin { font-weight: 600; }
+  .lang { position: relative; }
+  .lang summary, .lang.static { height: 40px; padding: 0 12px; display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; font-size: 14px; font-weight: 500; list-style: none; cursor: pointer; }
+  .lang summary::-webkit-details-marker { display: none; }
+  .lang summary:hover { background: rgba(31, 79, 216, 0.08); }
+  .dark .lang summary:hover { background: rgba(255, 255, 255, 0.1); }
+  .lang-list { position: absolute; inset-inline-end: 0; top: 46px; min-width: 160px; padding: 6px; border-radius: 12px; background: #fff; color: var(--ink); box-shadow: 0 0 0 1px rgba(11, 31, 92, 0.08), 0 18px 40px rgba(6, 16, 52, 0.22); display: flex; flex-direction: column; z-index: 50; }
+  .lang-list a { padding: 10px 12px; border-radius: 8px; text-decoration: none; font-size: 15px; }
+  .lang-list a:hover, .lang-list a.on { background: var(--cobalt-tint); color: var(--cobalt-ink); }
+  .lang-list a.on { font-weight: 600; }
+  .menu { display: none; position: relative; }
+  .menu summary { list-style: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 999px; cursor: pointer; }
+  .menu summary::-webkit-details-marker { display: none; }
+  .menu :global(.close-i) { display: none; }
+  .menu[open] :global(.open-i) { display: none; }
+  .menu[open] :global(.close-i) { display: block; }
+  .sheet { position: absolute; inset-inline-end: 0; top: 52px; width: min(320px, calc(100vw - 32px)); padding: 10px; border-radius: 16px; background: #fff; color: var(--ink); box-shadow: 0 0 0 1px rgba(11, 31, 92, 0.08), 0 24px 60px rgba(6, 16, 52, 0.3); display: flex; flex-direction: column; }
+  .sheet-link { padding: 12px 14px; border-radius: 10px; text-decoration: none; font-size: 16px; font-weight: 500; }
+  .sheet-link:hover, .sheet-link.on { background: var(--cobalt-tint); color: var(--cobalt-ink); }
+  .sheet-cta { display: flex; flex-direction: column; gap: 8px; padding: 10px 4px 4px; margin-top: 6px; border-top: 1px solid var(--line-soft); }
+  @media (max-width: 860px) {
+    .bar { height: 64px; }
+    .nav, .signin { display: none; }
+    .lang summary, .lang.static { padding: 0 8px; }
+    .menu { display: block; }
+  }
+</style>

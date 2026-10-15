@@ -1,0 +1,22 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/home/Hero.astro';
+import Timeline from '../../components/home/Timeline.astro';
+import Partners from '../../components/home/Partners.astro';
+import Onboard from '../../components/home/Onboard.astro';
+import Send from '../../components/home/Send.astro';
+import Faq from '../../components/home/Faq.astro';
+import Closing from '../../components/home/Closing.astro';
+import { langPaths, useI18n } from '../../i18n';
+export const getStaticPaths = langPaths;
+const { t } = useI18n(Astro.url);
+---
+<Base title={t.home.title} headerOverlay>
+  <Hero />
+  <Timeline />
+  <Partners />
+  <Onboard />
+  <Send />
+  <Faq />
+  <Closing />
+</Base>

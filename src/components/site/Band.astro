@@ -1,0 +1,12 @@
+---
+import { useI18n } from '../../i18n';
+interface Props { title: string; text: string; label?: string; href: string }
+const { t } = useI18n(Astro.url);
+const { title, text, label = t.band.cta, href } = Astro.props;
+---
+<section class="band">
+  <div class="wrap">
+    <div><h2 class="h-block">{title}</h2><p>{text}</p></div>
+    <a href={href} class="btn btn-light btn-lg">{label}</a>
+  </div>
+</section>

@@ -1,0 +1,84 @@
+---
+import Base from '../../layouts/Base.astro';
+import { COMPANY, EMAILS, isEmail } from '../../config';
+import { langPaths, useI18n } from '../../i18n';
+import { LEGAL_EN } from '../../legal/en';
+export const getStaticPaths = langPaths;
+const { t } = useI18n(Astro.url);
+const L = t.legal;
+const docs = L.docs;
+const slug = (doc: string, i: number) => `${doc}-${i + 1}`;
+// Paragraphs starting with "- " are list items; consecutive items form one list. Bodies are English until counsel signs off.
+const blocks = (paras: string[]) =>
+  paras.reduce<({ p: string } | { li: string[] })[]>((out, s) => {
+    if (!s.startsWith('- ')) return [...out, { p: s }];
+    const last = out[out.length - 1];
+    if (last && 'li' in last) { last.li.push(s.slice(2)); return out; }
+    return [...out, { li: [s.slice(2)] }];
+  }, []);
+---
+<Base title={L.title} description={L.desc}>
+  <section class="head">
+    <div class="wrap">
+      <span class="kicker">{L.kicker}</span>
+      <h1 class="h-page">{L.h1}</h1>
+      <p class="meta">{L.updated} {isEmail(EMAILS.legal) ? <a href={`mailto:${EMAILS.legal}`} class="link">{EMAILS.legal}</a> : EMAILS.legal}</p>
+      <nav aria-label={L.docsLabel} class="tabs">{docs.map((d) => <a href={`#${d.id}`}>{d.title}</a>)}</nav>
+    </div>
+  </section>
+
+  <section class="wrap layout">
+    <nav aria-label={L.sectionsLabel} class="toc">
+      {docs.map((d) => (
+        <div class="grp">
+          <a href={`#${d.id}`} class="grp-h">{d.title}</a>
+          {d.sections.map((title, i) => <a href={`#${slug(d.id, i)}`}>{i + 1}. {title}</a>)}
+        </div>
+      ))}
+    </nav>
+    <article class="docs">
+      <p class="note">{L.noteBefore}<a href={COMPANY.url} target="_blank" rel="noopener noreferrer" class="link">{COMPANY.name}</a>{L.noteAfter}{L.bodyNote && <> {L.bodyNote}</>}</p>
+      {docs.map((d) => (
+        <section id={d.id} class="doc">
+          <h2 class="h-block">{d.title}</h2>
+          {d.sections.map((title, i) => (
+            <section id={slug(d.id, i)} class="part">
+              <h3>{i + 1}. {title}</h3>
+              {LEGAL_EN[d.id]?.[i]
+                ? <div class="body" lang="en" dir="ltr">{blocks(LEGAL_EN[d.id][i]).map((b) => ('p' in b ? <p>{b.p}</p> : <ul>{b.li.map((x) => <li>{x}</li>)}</ul>))}</div>
+                : <div class="todo">{L.todo(title)}</div>}
+            </section>
+          ))}
+        </section>
+      ))}
+    </article>
+  </section>
+</Base>
+
+<style>
+  .head { border-bottom: 1px solid var(--line); }
+  .head .wrap { padding-block: clamp(44px, 5vw, 64px) 0; display: flex; flex-direction: column; gap: 18px; }
+  .meta { font-size: 16px; color: var(--ink-3); }
+  .tabs { display: flex; gap: 4px; margin-top: 8px; overflow-x: auto; }
+  .tabs a { height: 44px; padding: 0 18px; display: inline-flex; align-items: center; flex: 0 0 auto; text-decoration: none; font-size: 15px; font-weight: 500; color: var(--ink-2); }
+  .tabs a:hover { color: var(--ink); box-shadow: inset 0 -2px 0 var(--cobalt); }
+  .layout { padding-block: 48px 88px; display: grid; grid-template-columns: 260px minmax(0, 760px); gap: 64px; align-items: start; }
+  .toc { position: sticky; top: 24px; max-height: calc(100vh - 48px); overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+  .grp { display: flex; flex-direction: column; gap: 2px; }
+  .grp a { display: block; padding: 6px 12px; border-radius: 8px; font-size: 14px; text-decoration: none; color: var(--ink-2); }
+  .grp a:hover { background: var(--paper-2); }
+  .grp .grp-h { font-weight: 600; color: var(--ink); }
+  .docs { display: flex; flex-direction: column; gap: 32px; min-width: 0; }
+  .note { padding: 16px 18px; border-radius: 12px; background: var(--wash); font-size: 15px; line-height: 23px; }
+  .note .link { display: inline; }
+  .doc { display: flex; flex-direction: column; gap: 28px; padding-top: 8px; scroll-margin-top: 24px; }
+  .doc + .doc { padding-top: 40px; border-top: 1px solid var(--line); }
+  .part { display: flex; flex-direction: column; gap: 12px; scroll-margin-top: 24px; }
+  .part h3 { margin: 0; font-size: 20px; line-height: 26px; font-weight: 600; }
+  .body { display: flex; flex-direction: column; gap: 12px; font-size: 16px; line-height: 26px; color: var(--ink-2); }
+  .body p, .body ul { margin: 0; }
+  .body ul { padding-inline-start: 20px; display: flex; flex-direction: column; gap: 6px; }
+  .todo { padding: 16px 18px; border-radius: 10px; border: 1px dashed #C9D2DD; background: #FAFBFC; font-size: 15px; line-height: 24px; color: var(--ink-3); }
+  @media (max-width: 1099px) { .layout { grid-template-columns: 1fr; } .toc { display: none; } }
+  @media (max-width: 600px) { .tabs a { padding: 0 10px; font-size: 14px; } .tabs { gap: 0; margin-inline: -10px; } }
+</style>

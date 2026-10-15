@@ -1,0 +1,50 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { ALLOW_INDEXING } from '../config';
+import { LIVE, META, localize, stripLang, useI18n } from '../i18n';
+interface Props { title: string; description?: string; active?: string; headerTone?: 'light' | 'dark'; headerOverlay?: boolean; bare?: boolean; noindex?: boolean }
+const { t, lang, meta } = useI18n(Astro.url);
+const { title, description = t.site.defaultDesc, active, headerTone = 'light', headerOverlay = false, bare = false, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const base = stripLang(Astro.url.pathname);
+const FONTS: Record<string, string> = {
+  en: 'family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Manrope:wght@700;800',
+  zh: 'family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&family=Noto+Sans+SC:wght@400;500;600;700',
+  ar: 'family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Manrope:wght@700;800&family=Noto+Kufi+Arabic:wght@600;700;800',
+};
+---
+<!doctype html>
+<html lang={meta.html} dir={meta.dir}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {(!ALLOW_INDEXING || noindex) && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonical} />
+    {LIVE.length > 1 && LIVE.map((l) => <link rel="alternate" hreflang={META[l].html} href={new URL(localize(l, base), Astro.site)} />)}
+    {LIVE.length > 1 && <link rel="alternate" hreflang="x-default" href={new URL(base, Astro.site)} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={meta.og} />
+    <meta name="theme-color" content="#0B1F5C" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={`https://fonts.googleapis.com/css2?${FONTS[lang]}&display=swap`} />
+  </head>
+  <body>
+    <a class="skip sr-only" href="#main">{t.site.skip}</a>
+    {!bare && !headerOverlay && <Header tone={headerTone} active={active} />}
+    <main id="main">
+      <slot />
+    </main>
+    {!bare && <Footer />}
+  </body>
+</html>
+<style is:global>
+  .skip:focus { position: fixed; inset-inline-start: 16px; top: 16px; width: auto; height: auto; clip: auto; margin: 0; padding: 10px 16px; background: #fff; color: var(--navy); border-radius: 10px; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,.2); }
+</style>
