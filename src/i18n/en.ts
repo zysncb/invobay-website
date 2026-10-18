@@ -309,10 +309,13 @@ const en = {
     ],
     companyKicker: 'The company',
     companyTitle: (company: string) => `Invobay is a product of ${company}.`,
-    // Provided by OceanAstra (2026-10-13).
+    // Provided by OceanAstra (2026-10-13); Invobay sentence added 2026-10-18. The closing languages are the company's
+    // working languages — a statement of capability, like Organization.knowsLanguage on oceanastra.net, not the trilingual
+    // delivery and support it stopped promising on 2026-08-21. Keep it as supplied (product owner, 2026-10-18), and do not
+    // restate it as something the team or the support line commits to. Company facts follow company.json.
     companyText: [
       'OceanAstra Technologies L.L.C is a technology company registered in Dubai, United Arab Emirates. It holds a commercial licence from the Department of Economy and Tourism, Government of Dubai.',
-      'OceanAstra aims to bring AI into every enterprise in the Middle East. It builds AI-native organisation software and management systems for specific industries. It also brings proven technology platforms from elsewhere in the world into the region.',
+      'OceanAstra aims to bring AI into every enterprise in the Middle East. It builds AI-native organisation software and management systems for specific industries. It also brings proven technology platforms from elsewhere in the world into the region. Invobay is one of its industry management products, developed and operated in-house.',
       'Its founders have implemented enterprise systems from both sides: inside the organisations that run them and inside the vendors that sell them. The company serves clients in the UAE and the wider GCC, and works in English, Arabic and Chinese.',
     ],
     visit: (host: string) => `Visit ${host}`,

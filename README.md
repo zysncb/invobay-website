@@ -58,6 +58,24 @@ Settings → Secrets and variables → Actions → **Variables** 页签：
 4. 建议在 GitHub 个人 Settings → Pages 里验证 invobay.com 这个域名，防止被别人的 Pages 占用。
 5. 网站是公开可访问的（默认不被搜索引擎收录）；GitHub Pages 不能设访问密码。
 
+## 安全联系方式
+
+`public/.well-known/security.txt` 按 RFC 9116 提供安全问题的联系方式，内容指向 `support@invobay.com`。`public/` 下的文件原样拷贝到 `dist/`，所以它发布在 `https://invobay.com/.well-known/security.txt`；Pages 由 Actions 部署（`upload-pages-artifact`），不跑 Jekyll，以点开头的目录能正常发布。
+
+**`Expires` 为 2027-10-18，到期前必须续期** —— 过期的 security.txt 等于没有。部署后确认：
+
+```bash
+curl -I https://invobay.com/.well-known/security.txt
+```
+
+## 两个站点的内容同步
+
+公司官网（[oceanastra.net](https://oceanastra.net)，仓库 `zysncb/OceanAstra-Website`）把 Invobay 列在业务线 02「行业管理方案」里，两个站点对同一件事的说法必须一致：
+
+- **公司事实**（法人名、执照号、发照机关、地址、邮箱）以 `OceanAstra-Website/content/company.json` 为准，逐字一致。本仓库里这些事实出现在 `src/config.ts` 的 `COMPANY.about` 和三份字典的 `about.companyText`。
+- **Invobay 的产品说法**以本仓库 `src/i18n/en.ts` 为准。
+- 任何一边改了这两类内容，另一边同步改。公司官网的 README 也写了同一条规则。
+
 ## 上线前要替换的占位内容
 
 - `src/config.ts`：`EMAILS` 已全部填真实地址（合作、客服、API 申请、法务）；不设销售邮箱（2026-10-14）。以后新增团队邮箱可先写 `[XXX EMAIL]` 占位，填真实地址后自动变成可点击、可复制。

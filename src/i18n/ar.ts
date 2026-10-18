@@ -310,10 +310,12 @@ const ar: typeof en = {
     ],
     companyKicker: 'الشركة',
     companyTitle: (company: string) => `Invobay أحد منتجات ${company}.`,
-    // Translated from the English text supplied by OceanAstra (2026-10-13); to be confirmed by the company.
+    // Translated from the English text supplied by OceanAstra (2026-10-13). 2026-10-18: Invobay sentence added and the
+    // licensing authority corrected to company.json `licence.authority.ar`. The closing languages stay as supplied — see
+    // the note in en.ts. Arabic needs a native-speaker review.
     companyText: [
-      'OceanAstra Technologies L.L.C شركة تقنية مسجّلة في دبي، الإمارات العربية المتحدة، وتحمل رخصة تجارية صادرة عن دائرة الاقتصاد والسياحة في حكومة دبي.',
-      'تهدف OceanAstra إلى إدخال الذكاء الاصطناعي إلى كل مؤسسة في الشرق الأوسط؛ فهي تطوّر برمجيات مؤسسية وأنظمة إدارة مبنية على الذكاء الاصطناعي لقطاعات محدّدة، وتجلب إلى المنطقة منصات تقنية أثبتت نجاحها في أنحاء أخرى من العالم.',
+      'OceanAstra Technologies L.L.C شركة تقنية مسجّلة في دبي، الإمارات العربية المتحدة، وتحمل رخصة تجارية صادرة عن دائرة الاقتصاد والسياحة، حكومة دبي.',
+      'تهدف OceanAstra إلى إدخال الذكاء الاصطناعي إلى كل مؤسسة في الشرق الأوسط؛ فهي تطوّر برمجيات مؤسسية وأنظمة إدارة مبنية على الذكاء الاصطناعي لقطاعات محدّدة، وتجلب إلى المنطقة منصات تقنية أثبتت نجاحها في أنحاء أخرى من العالم. وتُعدّ Invobay إحدى منتجاتها في الإدارة القطاعية، تطوّرها وتشغّلها بنفسها.',
       'نفّذ مؤسسوها أنظمة المؤسسات من الجانبين: من داخل المؤسسات التي تشغّلها، ومن داخل الشركات التي تبيعها. تخدم الشركة عملاء في الإمارات ودول الخليج، وتعمل بالإنجليزية والعربية والصينية.',
     ],
     visit: (host: string) => `زيارة ${host}`,

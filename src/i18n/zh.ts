@@ -308,10 +308,12 @@ const zh: typeof en = {
     ],
     companyKicker: '公司',
     companyTitle: (company: string) => `Invobay 是 ${company} 旗下的产品。`,
-    // 译自 OceanAstra 提供的英文介绍（2026-10-13），待公司确认。
+    // 译自 OceanAstra 提供的英文介绍（2026-10-13）；2026-10-18 补入 Invobay 一句，发照机关按 OceanAstra-Website
+    // content/company.json 的 licence.authority.zh 逐字订正。末句三语是公司的工作语言（能力陈述），不是 2026-08-21
+    // 撤回的三语交付与支持承诺，按产品负责人 2026-10-18 决定保留原文。
     companyText: [
-      'OceanAstra Technologies L.L.C 是一家在阿联酋迪拜注册的科技公司，持有迪拜政府经济与旅游部颁发的商业执照。',
-      'OceanAstra 致力于把 AI 带进中东的每一家企业：为特定行业打造 AI 原生的组织软件和管理系统，同时把世界其他地区成熟的技术平台引入本地区。',
+      'OceanAstra Technologies L.L.C 是一家在阿联酋迪拜注册的科技公司，持有迪拜政府经济与旅游局（DET）颁发的商业执照。',
+      'OceanAstra 致力于把 AI 带进中东的每一家企业：为特定行业打造 AI 原生的组织软件和管理系统，同时把世界其他地区成熟的技术平台引入本地区。Invobay 就是其行业管理方案之一，由 OceanAstra 自主开发并运营。',
       '公司创始人既在使用企业系统的组织内部、也在销售这些系统的厂商一侧主导过企业系统的实施。公司服务阿联酋及海湾地区的客户，可使用英语、阿拉伯语和中文沟通。',
     ],
     visit: (host: string) => `访问 ${host}`,

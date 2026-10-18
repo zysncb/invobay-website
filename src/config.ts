@@ -8,7 +8,9 @@ export const WAITLIST_ENDPOINT: string = import.meta.env.PUBLIC_WAITLIST_ENDPOIN
 
 /**
  * Invobay is a product of OceanAstra. `about` holds the company introduction for /about, one string per paragraph
- * (provided by OceanAstra, 2026-10-13). While it is empty the page shows a placeholder.
+ * (provided by OceanAstra, 2026-10-13; Invobay sentence added 2026-10-18). While it is empty the page shows a
+ * placeholder. The company facts here follow OceanAstra-Website `content/company.json` word for word — see README —
+ * and the wording otherwise stays as the company supplied it; `src/i18n/en.ts` carries the notes on why.
  */
 export const COMPANY: { name: string; url: string; host: string; about: string[] } = {
   name: 'OceanAstra',
@@ -16,7 +18,7 @@ export const COMPANY: { name: string; url: string; host: string; about: string[]
   host: 'oceanastra.net',
   about: [
     'OceanAstra Technologies L.L.C is a technology company registered in Dubai, United Arab Emirates. It holds a commercial licence from the Department of Economy and Tourism, Government of Dubai.',
-    'OceanAstra aims to bring AI into every enterprise in the Middle East. It builds AI-native organisation software and management systems for specific industries. It also brings proven technology platforms from elsewhere in the world into the region.',
+    'OceanAstra aims to bring AI into every enterprise in the Middle East. It builds AI-native organisation software and management systems for specific industries. It also brings proven technology platforms from elsewhere in the world into the region. Invobay is one of its industry management products, developed and operated in-house.',
     'Its founders have implemented enterprise systems from both sides: inside the organisations that run them and inside the vendors that sell them. The company serves clients in the UAE and the wider GCC, and works in English, Arabic and Chinese.',
   ],
 };
