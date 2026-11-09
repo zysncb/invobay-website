@@ -233,7 +233,7 @@ const zh: typeof en = {
       { q: '价格含增值税吗？', a: '不含。价格不含增值税，结算时加收 5% 增值税，并显示在 Invobay 开给你的发票上。' },
       { q: '什么算一个开票额度？', a: '你的 ASP 受理的一张单据。被拒或失败的单据、草稿、预检以及你收到的发票都不扣额度。' },
       { q: '停止会员后会怎样？', a: '会员到期后，名下公司停止开票和收票，草稿保留。已购买的额度有效期不变，续订后可以继续使用。' },
-      { q: '怎么付款？', a: '使用借记卡（Visa 或 Mastercard）付款，不支持信用卡和银行转账。' },
+      { q: '怎么付款？', a: '支持在线支付。' },
       { q: '可以退款吗？', a: '不可以。会员费、开票额度和代办开户费用均不退款。我们不自动续费，只有你主动续订时才会扣款。' },
     ],
     bandTitle: '今天就免费开始。',
@@ -362,7 +362,7 @@ const zh: typeof en = {
     copiedLive: '邮箱地址已复制',
     copyFailedLive: '复制失败，请选中地址后手动复制。',
     common: '常见问题',
-    address: 'Invobay，OceanAstra 旗下产品 · Churchill Tower 1 3707 室，迪拜商务湾（Business Bay），阿拉伯联合酋长国',
+    address: 'Invobay，OceanAstra 旗下产品 · Office 3707, Churchill Tower 1, Business Bay, Dubai, United Arab Emirates',
     selfKicker: '自助查询',
     self: [
       { t: 'EmaraTax 开户指南', d: '谁来登录、点哪里，以及无法登录时怎么办。', h: '/guides/emaratax-onboarding' },

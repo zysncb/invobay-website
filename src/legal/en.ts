@@ -1,7 +1,7 @@
 // Draft legal texts for /legal (docs/project/11 S05), in English only until counsel reviews them (H12).
 // One array per section, in the same order as the section titles in i18n `legal.docs`. A paragraph that starts
 // with "- " is shown as a list item. Text in [BRACKETS] is still to be filled in by OceanAstra or counsel.
-// Facts follow the PRD (docs/product/01): no auto-renew, debit cards only, retention rule R11, managed onboarding F4.
+// Facts follow the PRD (docs/product/01): no auto-renew, online payment, retention rule R11, managed onboarding F4.
 
 export const LEGAL_EN: Record<string, string[][]> = {
   terms: [
@@ -25,7 +25,7 @@ export const LEGAL_EN: Record<string, string[][]> = {
       'You can use Invobay free to create an account, verify up to two companies and prepare onboarding. Issuing and receiving e-invoices needs a membership, monthly (30 days) or yearly (365 days).',
       'There is no auto-renew. We remind you before your membership ends: 60 days ahead for yearly, 10 days ahead for monthly. If you renew early, the new period starts when the current one ends. When a membership ends, your companies stop issuing and receiving invoices; drafts are kept.',
       'You can also buy extra member seats, invoice credits, extra storage and managed onboarding. Invoice credits are priced per ASP, valid for 12 months, and used only when your ASP accepts a document.',
-      'Prices are in UAE dirhams and exclude 5% VAT. We take payment by debit card through our payment provider and issue you a tax invoice for each payment. Payments are non-refundable, as set out in our refund policy. A price change never affects a period you have already paid for.',
+      'Prices are in UAE dirhams and exclude 5% VAT. We support online payment and issue you a tax invoice for each payment. Payments are non-refundable, as set out in our refund policy. A price change never affects a period you have already paid for.',
     ],
     [
       'Your business data and the invoices you issue and receive belong to you. You allow us to process them to provide Invobay, including sending them to your ASP and creating PDF copies.',
@@ -80,7 +80,7 @@ export const LEGAL_EN: Record<string, string[][]> = {
     ],
     [
       '- Your ASP, to onboard your companies, exchange and report your documents, and fetch documents sent to you. The ASP processes them under its own terms.',
-      '- Service providers that work for us: Alibaba Cloud (hosting, Dubai), Amazon Web Services (email, UAE), Google (AI document reading and Google sign-in), Network International (card payments), [SMS PROVIDER] (text messages) and PostHog (product analytics). If you turn on WhatsApp notifications, Meta processes those messages. [Final list to be confirmed before launch.]',
+      '- Service providers that work for us: Alibaba Cloud (hosting, Dubai), Amazon Web Services (email, UAE), Google (AI document reading and Google sign-in), our payment provider (online payments), [SMS PROVIDER] (text messages) and PostHog (product analytics). If you turn on WhatsApp notifications, Meta processes those messages. [Final list to be confirmed before launch.]',
       '- Authorities, courts or regulators when the law requires it, and our professional advisers under a duty of confidentiality.',
       '- A buyer or successor if OceanAstra’s business is transferred, under the same protections.',
     ],

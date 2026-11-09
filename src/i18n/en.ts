@@ -234,7 +234,7 @@ const en = {
       { q: 'Is VAT included?', a: 'No. Prices exclude VAT; 5% VAT is added at checkout and shown on your invoice from Invobay.' },
       { q: 'What counts as one invoice credit?', a: 'One document your ASP accepts. Rejected or failed documents, drafts, prechecks and invoices you receive don’t use credits.' },
       { q: 'What happens if I stop my membership?', a: 'Your companies stop issuing and receiving invoices at the end of the period; drafts are kept. Credits you bought keep their expiry date and work again when you renew.' },
-      { q: 'How can I pay?', a: 'By debit card (Visa or Mastercard). Credit cards and bank transfer aren’t accepted.' },
+      { q: 'How can I pay?', a: 'We support online payment.' },
       { q: 'Can I get a refund?', a: 'No. Memberships, invoice credits and managed onboarding aren’t refundable. There’s no auto-renew, so you’re only charged when you choose to renew.' },
     ],
     bandTitle: 'Start free today.',
