@@ -80,12 +80,12 @@ export const LEGAL_EN: Record<string, string[][]> = {
     ],
     [
       '- Your ASP, to onboard your companies, exchange and report your documents, and fetch documents sent to you. The ASP processes them under its own terms.',
-      '- Service providers that work for us: Alibaba Cloud (hosting, Dubai), Amazon Web Services (email, UAE), Google (AI document reading and Google sign-in), our payment provider (online payments), [SMS PROVIDER] (text messages) and PostHog (product analytics). If you turn on WhatsApp notifications, Meta processes those messages. [Final list to be confirmed before launch.]',
+      '- Service providers that work for us, which may change over time: cloud hosting (in Dubai), email delivery, AI document reading, third-party sign-in, online payments, text messages and product analytics. If you turn on WhatsApp notifications, our messaging provider processes those messages.',
       '- Authorities, courts or regulators when the law requires it, and our professional advisers under a duty of confidentiality.',
       '- A buyer or successor if OceanAstra’s business is transferred, under the same protections.',
     ],
     [
-      'Your business data, documents, certificates and billing records are stored with Alibaba Cloud in Dubai, United Arab Emirates, and backed up in the UAE.',
+      'Your business data, documents, certificates and billing records are stored with our cloud provider in Dubai, United Arab Emirates, and backed up in the UAE.',
       'Some service providers process limited data outside the UAE, for example AI document reading and product analytics. For these transfers we use the safeguards UAE data protection law requires.',
     ],
     [
@@ -113,7 +113,7 @@ export const LEGAL_EN: Record<string, string[][]> = {
     ],
     [
       '- Essential: keep you signed in, protect forms against misuse and remember your language. These are always on.',
-      '- Analytics: PostHog, to count visits and see which pages and buttons are used, including heatmaps. Only with your consent.',
+      '- Analytics: an analytics service, to count visits and see which pages and buttons are used, including heatmaps. Only with your consent.',
       'We don’t use advertising cookies.',
     ],
     [
