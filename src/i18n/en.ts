@@ -364,7 +364,7 @@ const en = {
     copiedLive: 'Email address copied',
     copyFailedLive: 'Copy failed. Select the address and copy it.',
     common: 'Common questions',
-    address: 'Invobay, a product of OceanAstra · [OFFICE ADDRESS], United Arab Emirates',
+    address: 'Invobay, a product of OceanAstra · Office 3707, Churchill Tower 1, Business Bay, Dubai, United Arab Emirates',
     selfKicker: 'Find it yourself',
     self: [
       { t: 'EmaraTax onboarding guide', d: 'Who signs in, where to click, and what to do if you can’t sign in.', h: '/guides/emaratax-onboarding' },

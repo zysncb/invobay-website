@@ -364,7 +364,7 @@ const ar: typeof en = {
     copiedLive: 'تم نسخ عنوان البريد',
     copyFailedLive: 'تعذّر النسخ. حدّد العنوان وانسخه يدويًا.',
     common: 'الأسئلة الشائعة',
-    address: 'Invobay، أحد منتجات OceanAstra · [OFFICE ADDRESS]، الإمارات العربية المتحدة',
+    address: 'Invobay، أحد منتجات OceanAstra · مكتب 3707، برج تشرشل 1، الخليج التجاري، دبي، الإمارات العربية المتحدة',
     selfKicker: 'ابحث بنفسك',
     self: [
       { t: 'دليل التسجيل على إمارات تاكس', d: 'من يسجّل الدخول، وأين تنقر، وماذا تفعل إذا تعذّر الدخول.', h: '/guides/emaratax-onboarding' },

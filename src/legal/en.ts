@@ -6,7 +6,7 @@
 export const LEGAL_EN: Record<string, string[][]> = {
   terms: [
     [
-      'Invobay is an online service run by OceanAstra Technologies L.L.C (“OceanAstra”, “we”, “us”), a company registered in Dubai, United Arab Emirates, commercial licence [LICENCE NUMBER], [REGISTERED ADDRESS].',
+      'Invobay is an online service run by OceanAstra Technologies L.L.C (“OceanAstra”, “we”, “us”), a company registered in Dubai, United Arab Emirates, commercial licence 1646635, with its registered address at Office 3707, Churchill Tower 1, Business Bay, Dubai, UAE.',
       'Invobay is not an accredited service provider (ASP) and is not part of the UAE Ministry of Finance or the Federal Tax Authority (FTA). We connect your business to the ASP you choose.',
     ],
     [
@@ -54,7 +54,7 @@ export const LEGAL_EN: Record<string, string[][]> = {
       '[Governing law and the courts that hear disputes, to be confirmed by counsel.]',
     ],
     [
-      'Questions about these terms: email the address at the top of this page, or write to OceanAstra Technologies L.L.C, [REGISTERED ADDRESS], Dubai, United Arab Emirates.',
+      'Questions about these terms: email the address at the top of this page, or write to OceanAstra Technologies L.L.C, Office 3707, Churchill Tower 1, Business Bay, Dubai, United Arab Emirates.',
     ],
   ],
 

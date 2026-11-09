@@ -362,7 +362,7 @@ const zh: typeof en = {
     copiedLive: '邮箱地址已复制',
     copyFailedLive: '复制失败，请选中地址后手动复制。',
     common: '常见问题',
-    address: 'Invobay，OceanAstra 旗下产品 · [OFFICE ADDRESS]，阿拉伯联合酋长国',
+    address: 'Invobay，OceanAstra 旗下产品 · Churchill Tower 1 3707 室，迪拜商务湾（Business Bay），阿拉伯联合酋长国',
     selfKicker: '自助查询',
     self: [
       { t: 'EmaraTax 开户指南', d: '谁来登录、点哪里，以及无法登录时怎么办。', h: '/guides/emaratax-onboarding' },
